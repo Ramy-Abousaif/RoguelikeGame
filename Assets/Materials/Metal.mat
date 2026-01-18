@@ -107,6 +107,7 @@ Material:
     - _ENVIRONMENT_REFLECTIONS_OFF: 0
     - _EnvironmentReflections: 1
     - _FlashAmount: 0
+    - _Gamma: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
