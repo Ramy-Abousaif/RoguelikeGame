@@ -119350,14 +119350,21 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.33333334
-    functionName: PlayEffect
+    functionName: FireAbility
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0.5
     intParameter: 0
     messageOptions: 0
-  - time: 0.4
-    functionName: ShakeCamera
+  - time: 0.33333334
+    functionName: OnThrow
+    data: 
+    objectReferenceParameter: {fileID: 919132149155446097, guid: cd95cfc2cf3065d4f92906536035f132, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.4
+    functionName: Restore
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

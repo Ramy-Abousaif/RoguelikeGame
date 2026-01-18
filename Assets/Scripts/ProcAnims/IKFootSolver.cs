@@ -13,7 +13,7 @@ public class IKFootSolver : MonoBehaviour
     [SerializeField] float stepHeight = 1;
     [SerializeField] Vector3 footOffset = default;
     public float xSpacing;
-    public float ySpacing;
+    public float zSpacing;
     public GameObject impact;
     public GameObject impactDecal;
     Vector3 oldPosition, currentPosition, newPosition;
@@ -34,7 +34,7 @@ public class IKFootSolver : MonoBehaviour
         transform.position = currentPosition;
         transform.forward = -currentNormal;
 
-        Ray ray = new Ray(body.position + (body.right * xSpacing) + (body.up * ySpacing), Vector3.down);
+        Ray ray = new Ray(body.position + (body.right * xSpacing) + (body.forward * zSpacing), Vector3.down);
 
         if (Physics.Raycast(ray, out RaycastHit info, 10, lm.value))
         {

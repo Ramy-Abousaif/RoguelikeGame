@@ -86,7 +86,7 @@ public class PendulumCreator : MonoBehaviour
                             t[i] = incrementalTime;
                         }
 
-                        float currLerp = Easing.Elastic.Out(t[i]);
+                        float currLerp = Ease.Elastic.Out(t[i]);
                         float deltaLerp = currLerp - prevLerp[i];
                         pendulums[i].transform.localScale += Vector3.one * deltaLerp * 2f;
                         pendulums[i].transform.position += Vector3.right * deltaLerp * popInDistance;
@@ -102,7 +102,7 @@ public class PendulumCreator : MonoBehaviour
                         t[i] = incrementalTime;
                     }
 
-                    float currLerp = Easing.Elastic.Out(t[i]);
+                    float currLerp = Ease.Elastic.Out(t[i]);
                     float deltaLerp = currLerp - prevLerp[i];
                     pendulums[i].transform.localScale += Vector3.one * deltaLerp * 2f;
                     pendulums[i].transform.position += Vector3.right * deltaLerp * popInDistance;

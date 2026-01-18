@@ -87070,7 +87070,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.5
-    functionName: PlayEffect
+    functionName: FireAbility
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 1

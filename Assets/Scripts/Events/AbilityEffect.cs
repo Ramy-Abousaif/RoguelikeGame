@@ -3,29 +3,32 @@ using UnityEngine;
 
 public class AbilitiyEffects : MonoBehaviour
 {
-    private Abilities.Ability[] abilities;
+    private Abilities.Ability[] _abilities;
 
     void Awake()
     {
-        abilities = transform.root.GetComponent<Abilities>().abilities;
+        _abilities = transform.root.GetComponent<Abilities>().abilities;
     }
 
-    public void PlayEffect(AnimationEvent animationEvent)
+    public void FireAbility(int index)
     {
-        int index = animationEvent.intParameter;
-        float disableTime = animationEvent.floatParameter;
-        StartCoroutine(SpawnAbilityEffect(index, disableTime));
+        if (_abilities == null || index < 0 || index >= _abilities.Length)
+            return;
+
+        Abilities.Ability a = _abilities[index];
+        if (a.abilityEmitter == null)
+            return;
+
+        a.abilityEmitter.Fire(a);
     }
 
-    IEnumerator SpawnAbilityEffect(int index, float disableTime)
+    public void OnThrow(int index)
     {
-        Abilities.Ability ability = abilities[index];
-        Transform spawnPoint = ability.effectSpawnPoint;
-        ability.effectPrefab.transform.eulerAngles = new Vector3(spawnPoint.transform.eulerAngles.x, spawnPoint.transform.eulerAngles.y, spawnPoint.transform.eulerAngles.z);
-        ability.effectPrefab.transform.position = spawnPoint.transform.position;
-        ability.effectPrefab.transform.localScale = new Vector3(ability.currentAbilityRange, ability.currentAbilityRange, ability.currentAbilityRange);
-        ability.effectPrefab.SetActive(true);
-        yield return new WaitForSeconds(disableTime);
-        ability.effectPrefab.SetActive(false);
+        _abilities[index].abilityEmitter.optionalHeldItem.SetActive(false);
+    }
+
+    public void Restore(int index)
+    {
+        _abilities[index].abilityEmitter.optionalHeldItem.SetActive(true);
     }
 }

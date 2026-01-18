@@ -21,12 +21,10 @@ public class PhysicsBasedCharacterController : Character
     private Vector3 _rayDir = Vector3.down;
     private Vector3 _previousVelocity = Vector3.zero;
     private Vector2 _moveContext;
-    private ParticleSystem.EmissionModule _emission;
 
     [Header("Other:")]
     [SerializeField] private bool _adjustInputsToCameraAngle = false;
     [SerializeField] private LayerMask _terrainLayer;
-    [SerializeField] private ParticleSystem _dustParticleSystem;
     [SerializeField] private Animator anim;
     public Animator Anim { get { return anim; } set { anim = value; } }
 
@@ -124,11 +122,6 @@ public class PhysicsBasedCharacterController : Character
         // Prevent immediate auto-jump on scene start by initializing the jump-press timer
         _timeSinceJumpPressed = _jumpBuffer;
 
-        if (_dustParticleSystem)
-        {
-            _emission = _dustParticleSystem.emission; // Stores the module in a local variable
-            _emission.enabled = false; // Applies the new value directly to the Particle System
-        }
         StartCoroutine(CallItemUpdate());
     }
 
@@ -295,14 +288,6 @@ public class PhysicsBasedCharacterController : Character
         _isGrounded = grounded;
         if (grounded == true)
         {
-            if (_dustParticleSystem)
-            {
-                if (_emission.enabled == false)
-                {
-                    _emission.enabled = true; // Applies the new value directly to the Particle System                  
-                }
-            }
-
             _timeSinceUngrounded = 0f;
 
             if (_timeSinceJump > 0.2f)
@@ -312,14 +297,6 @@ public class PhysicsBasedCharacterController : Character
         }
         else
         {
-            if (_dustParticleSystem)
-            {
-                if (_emission.enabled == true)
-                {
-                    _emission.enabled = false; // Applies the new value directly to the Particle System
-                }
-            }
-
             _timeSinceUngrounded += Time.fixedDeltaTime;
         }
 

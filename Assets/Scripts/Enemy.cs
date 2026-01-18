@@ -16,7 +16,7 @@ public class Enemy : Character
         // Sound
         if(direct)
         {
-            Camera.main.GetComponent<CameraShake>().ShakeCamera(5f, 3f, 0.5f);
+            Camera.main.GetComponent<CameraShake>().ShakeCamera(2f, 2f, 0.3f);
         }
     }
 

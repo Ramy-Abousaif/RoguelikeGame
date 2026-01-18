@@ -60,7 +60,7 @@ public class Effect : MonoBehaviour
         _t += Time.deltaTime / duration;
         _t = Mathf.Min(_t, 1f);
 
-        float t = Easing.Bounce.Out(_t);
+        float t = Ease.Bounce.Out(_t);
 
         // Lerp position from startPos to endPos
         Vector3 position = MathsUtils.LerpVector3(startPos, endPos, t);

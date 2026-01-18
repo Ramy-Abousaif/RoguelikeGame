@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1653079456226441404}
   - component: {fileID: 6370981913780834893}
   - component: {fileID: 2369191941113747900}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Impact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -223,7 +223,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.53270435, g: 0.69176376, b: 0.30525333, a: 1}
+      maxColor: {r: 0.53597915, g: 0.6938105, b: 0.30852818, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}

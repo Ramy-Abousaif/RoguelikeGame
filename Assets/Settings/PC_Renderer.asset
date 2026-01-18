@@ -16,10 +16,42 @@ MonoBehaviour:
   renderPassEvent: 450
   outlinesLayerMask:
     serializedVersion: 2
+    m_Bits: 3575
+  outlineSettings:
+    outlineColor: {r: 0, g: 0, b: 0, a: 1}
+    outlineScale: 0.58
+    depthThreshold: 38.3
+    robertsCrossMultiplier: 169
+    normalThreshold: 1
+    steepAngleThreshold: 0.2
+    steepAngleMultiplier: 25
+    colorFormat: 0
+    depthBufferBits: 0
+    filterMode: 0
+    backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+    perObjectData: 0
+    enableDynamicBatching: 0
+    enableInstancing: 0
+--- !u!114 &-950171723799860123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee336ad3d0110f944a2b40027a0f865e, type: 3}
+  m_Name: ScreenSpaceOutlines
+  m_EditorClassIdentifier: Assembly-CSharp::ScreenSpaceOutlines
+  m_Active: 1
+  renderPassEvent: 450
+  outlinesLayerMask:
+    serializedVersion: 2
     m_Bits: 4096
   outlineSettings:
     outlineColor: {r: 1, g: 1, b: 1, a: 1}
-    outlineScale: 1
+    outlineScale: 2.91
     depthThreshold: 100
     robertsCrossMultiplier: 500
     normalThreshold: 0.4
@@ -60,7 +92,8 @@ MonoBehaviour:
   - {fileID: 7833122117494664109}
   - {fileID: 3540843729365890880}
   - {fileID: -1705365958746157312}
-  m_RendererFeatureMap: ad6b866f10d7b46c40f705969c9a2331004fe428b25255e8
+  - {fileID: -950171723799860123}
+  m_RendererFeatureMap: ad6b866f10d7b46c40f705969c9a2331004fe428b25255e865ec49f7d94fd0f2
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}

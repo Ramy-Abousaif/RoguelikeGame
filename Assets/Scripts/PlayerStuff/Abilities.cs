@@ -16,8 +16,10 @@ public class Abilities : MonoBehaviour
         public string stateName = "Main Attack";
         public int layerIndex = 1;
 
+        [Header("Attack")]
+        public AbilityEmitter abilityEmitter;
+
         public GameObject effectPrefab;
-        
         public Transform effectSpawnPoint;
 
         public float baseAbilityCooldown = 1f;

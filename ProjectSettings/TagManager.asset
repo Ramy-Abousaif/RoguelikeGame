@@ -16,7 +16,7 @@ TagManager:
   - Player
   - Enemy
   - PlayerAttack
-  - 
+  - Effect
   - Ring
   - Interactable
   - SelectedInteractable
