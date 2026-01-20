@@ -18,6 +18,7 @@ MonoBehaviour:
   abilities:
   - stateName: Main Attack
     layerIndex: 1
+    useAnimationEvent: 1
     abilityType: 2
     abilityEmitter: {fileID: 0}
     baseAbilityCooldown: 0
@@ -35,6 +36,7 @@ MonoBehaviour:
     playTimer: 0
   - stateName: Secondary Attack
     layerIndex: 1
+    useAnimationEvent: 1
     abilityType: 0
     abilityEmitter: {fileID: 0}
     baseAbilityCooldown: 5
@@ -46,12 +48,13 @@ MonoBehaviour:
     baseAbilityDamage: 50
     currentAbilityDamage: 50
     affectedByAttackSpeed: 0
-    cooldownTimer: 0
+    cooldownTimer: 0.32453197
     clip: {fileID: 7400000, guid: 1b45ecd8fefd2e0499ac495d04299860, type: 2}
     isPlaying: 0
     playTimer: 0
   - stateName: Third Attack
     layerIndex: 1
+    useAnimationEvent: 1
     abilityType: 2
     abilityEmitter: {fileID: 0}
     baseAbilityCooldown: 5
@@ -63,12 +66,13 @@ MonoBehaviour:
     baseAbilityDamage: 40
     currentAbilityDamage: 40
     affectedByAttackSpeed: 0
-    cooldownTimer: 1.7957484
-    clip: {fileID: 0}
+    cooldownTimer: 3.469391
+    clip: {fileID: 7400000, guid: 83afbb8aad3cbcc41b5ff19112b69806, type: 2}
     isPlaying: 0
     playTimer: 0
   - stateName: 
     layerIndex: 1
+    useAnimationEvent: 1
     abilityType: 1
     abilityEmitter: {fileID: 0}
     baseAbilityCooldown: 0

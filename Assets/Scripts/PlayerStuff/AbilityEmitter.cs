@@ -8,6 +8,8 @@ public abstract class AbilityEmitter : MonoBehaviour
     [SerializeField] public GameObject optionalHeldItem;
     [SerializeField] protected int abilityIndex = 0;
     protected PhysicsBasedCharacterController player;
+    protected Coroutine firingRoutine;
+    protected bool isFiring = false;
 
     private void Awake()
     {
@@ -24,5 +26,18 @@ public abstract class AbilityEmitter : MonoBehaviour
     public bool Matches(AbilityType type, int index)
     {
         return supportedType == type && abilityIndex == index;
+    }
+
+    public virtual void StopFire()
+    {
+        if (!isFiring) return;
+
+        isFiring = false;
+
+        if (firingRoutine != null)
+            StopCoroutine(firingRoutine);
+
+        if (abilityEffect != null)
+            abilityEffect.SetActive(false);
     }
 }

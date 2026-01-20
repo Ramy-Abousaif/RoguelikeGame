@@ -14,7 +14,6 @@ public class AbilitiyEffects : MonoBehaviour
         if (a.abilityEmitter == null)
             return;
 
-        Debug.Log(a.abilityEmitter);
         a.abilityEmitter.Fire(a);
     }
 

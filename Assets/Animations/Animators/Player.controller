@@ -124,6 +124,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 6
     m_ConditionEvent: AbilityIndex
     m_EventTreshold: 1
+  - m_ConditionMode: 2
+    m_ConditionEvent: isTransformed
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4193344122652951558}
   m_Solo: 0
@@ -469,6 +472,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 6
     m_ConditionEvent: AbilityIndex
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: isTransformed
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -24490265899874623}
   m_Solo: 0
@@ -732,6 +738,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 6
     m_ConditionEvent: AbilityIndex
     m_EventTreshold: 2
+  - m_ConditionMode: 2
+    m_ConditionEvent: isTransformed
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6259477887616374023}
   m_Solo: 0
@@ -893,6 +902,12 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
   - m_Name: isFlying
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: isTransformed
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -1088,16 +1103,16 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -24490265899874623}
-    m_Position: {x: 220, y: -70, z: 0}
+    m_Position: {x: 40, y: -90, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5607817828232627797}
     m_Position: {x: 310, y: 80, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4193344122652951558}
-    m_Position: {x: 220, y: 240, z: 0}
+    m_Position: {x: 310, y: -190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6259477887616374023}
-    m_Position: {x: 460, y: -70, z: 0}
+    m_Position: {x: 780, y: -80, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

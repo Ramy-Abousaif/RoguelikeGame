@@ -24,6 +24,7 @@ public class Abilities : MonoBehaviour
     {
         public string stateName = "Main Attack";
         public int layerIndex = 1;
+        public bool useAnimationEvent = true;
 
         [Header("Attack")]
         public AbilityType abilityType;
@@ -195,6 +196,11 @@ public class Abilities : MonoBehaviour
 
     private IEnumerator FormRoutine(CharacterForm newForm, float blendTime)
     {
+        for(int i = 0; i < _currentForm.abilities.Length; i++)
+        {
+            _currentForm.abilities[i].abilityEmitter.StopFire();
+        }
+
         _currentForm = newForm;
 
         float start = _currentFormAmount;
@@ -206,6 +212,15 @@ public class Abilities : MonoBehaviour
 
         controller.attackSpeed = newForm.damageMultiplier;
         controller.EnableFlight(newForm.canFly);
+
+        if(newForm == altForm)
+        {
+            anim.SetBool("isTransformed", true);
+        }
+        else
+        {
+            anim.SetBool("isTransformed", false);
+        }
 
         if (newForm.abilities != null)
         {
@@ -264,9 +279,9 @@ public class Abilities : MonoBehaviour
         }
     }
 
-    public void OnHit(Enemy enemy, int abilityIndex)
+    public void OnHit(Enemy enemy, int abilityIndex, bool direct = false)
     {
-        enemy.TakeDamage(_currentForm.abilities[abilityIndex].currentAbilityDamage, true);
+        enemy.TakeDamage(_currentForm.abilities[abilityIndex].currentAbilityDamage, direct);
     }
 
     // Update is called once per frame
@@ -298,6 +313,17 @@ public class Abilities : MonoBehaviour
                     StopAttack();
                 }
             }
+        }
+
+        if (_attackHeld)
+        {
+            var hitscanEmitter = abilities[0].abilityEmitter as HitscanEmitter;
+            hitscanEmitter?.Fire(abilities[0]);
+        }
+        else
+        {
+            var hitscanEmitter = abilities[0].abilityEmitter as HitscanEmitter;
+            hitscanEmitter?.StopFire();
         }
 
         // Other abilities: update cooldowns and playing timers
@@ -362,18 +388,27 @@ public class Abilities : MonoBehaviour
         var a = _currentForm.abilities[index];
         if (a == null) return;
 
-        if (a.abilityEmitter.supportedType == AbilityType.TRANSFORM)
-        {
-            a.abilityEmitter.Fire(a);
-            return;
-        }
-
-        // Primary is hold-to-repeat and handled separately
         if (index == 0)
         {
             _attackHeld = true;
+
             if (!_isAttacking)
+            {
                 StartAttack(0);
+            }
+
+            // Fire immediately ONLY if this primary does NOT rely on animation
+            if (!a.useAnimationEvent)
+            {
+                a.abilityEmitter?.Fire(a);
+            }
+
+            return;
+        }
+
+        if (a.abilityEmitter.supportedType == AbilityType.TRANSFORM && !_isAttacking)
+        {
+            a.abilityEmitter.Fire(a);
             return;
         }
 

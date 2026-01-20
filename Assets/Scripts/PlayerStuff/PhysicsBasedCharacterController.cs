@@ -106,6 +106,7 @@ public class PhysicsBasedCharacterController : Character
     private int _remainingExtraJumps = 0;
 
     [Header("Form / Movement Mode")]
+    public float duration = 15f;
     public bool IsFlying { get; private set; }
     [SerializeField] private float flightAcceleration = 25f;
     [SerializeField] private float flightLeanAngle = 20f;

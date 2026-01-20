@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Shadow
   m_EditorClassIdentifier: Assembly-CSharp::CharacterForm
   moveSpeedMultiplier: 4
-  damageMultiplier: 1.5
+  damageMultiplier: 2
   canFly: 1
   abilities:
-  - stateName: Main Attack
+  - stateName: 
     layerIndex: 1
-    abilityType: 2
+    useAnimationEvent: 0
+    abilityType: 3
     abilityEmitter: {fileID: 0}
     baseAbilityCooldown: 0
     currentAbilityCooldown: 0
@@ -35,6 +36,7 @@ MonoBehaviour:
     playTimer: 0
   - stateName: 
     layerIndex: 1
+    useAnimationEvent: 1
     abilityType: 0
     abilityEmitter: {fileID: 0}
     baseAbilityCooldown: 5
@@ -46,12 +48,13 @@ MonoBehaviour:
     baseAbilityDamage: 50
     currentAbilityDamage: 50
     affectedByAttackSpeed: 0
-    cooldownTimer: 3.5683107
+    cooldownTimer: 0.76200217
     clip: {fileID: 7400000, guid: 1b45ecd8fefd2e0499ac495d04299860, type: 2}
     isPlaying: 0
     playTimer: 0
   - stateName: 
     layerIndex: 1
+    useAnimationEvent: 1
     abilityType: 0
     abilityEmitter: {fileID: 0}
     baseAbilityCooldown: 0
@@ -69,7 +72,8 @@ MonoBehaviour:
     playTimer: 0
   - stateName: 
     layerIndex: 1
-    abilityType: 1
+    useAnimationEvent: 0
+    abilityType: 0
     abilityEmitter: {fileID: 0}
     baseAbilityCooldown: 0
     currentAbilityCooldown: 0
