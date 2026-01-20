@@ -105,6 +105,13 @@ public class PhysicsBasedCharacterController : Character
     [SerializeField] private int _maxExtraJumps = 0;
     private int _remainingExtraJumps = 0;
 
+    [Header("Form / Movement Mode")]
+    public bool IsFlying { get; private set; }
+    [SerializeField] private float flightAcceleration = 25f;
+    [SerializeField] private float flightLeanAngle = 20f;
+    [SerializeField] private float flightLeanSmooth = 6f;
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -143,6 +150,16 @@ public class PhysicsBasedCharacterController : Character
             grounded = false;
         }
         return grounded;
+    }
+
+    public void EnableFlight(bool value)
+    {
+        IsFlying = value;
+        _rb.useGravity = !value;
+        _rb.freezeRotation = value;
+        
+        if (anim != null)
+            anim.SetBool("isFlying", IsFlying);
     }
 
     /// <summary>
@@ -281,6 +298,12 @@ public class PhysicsBasedCharacterController : Character
             _moveInput = AdjustInputToFaceCamera(_moveInput);
         }
 
+        if (IsFlying)
+        {
+            FlyMove();
+            return;
+        }
+
         (bool rayHitGround, RaycastHit rayHit) = RaycastToGround();
         SetPlatform(rayHit);
 
@@ -316,6 +339,71 @@ public class PhysicsBasedCharacterController : Character
         if (grounded)
         {
             _remainingExtraJumps = _maxExtraJumps;
+        }
+    }
+
+    private void FlyMove()
+    {
+        if (Camera.main == null)
+            return;
+
+        // -------- INPUT --------
+        Vector3 input = new Vector3(_moveContext.x, 0f, _moveContext.y);
+
+        Vector3 camForward = Camera.main.transform.forward;
+        Vector3 camRight = Camera.main.transform.right;
+
+        camForward.Normalize();
+        camRight.Normalize();
+
+        // Horizontal movement
+        Vector3 horizontalMove =
+            camForward * input.z +
+            camRight * input.x;
+
+        // Vertical movement
+        float vertical = _jumpInput.y;
+        Vector3 verticalMove = Vector3.up * vertical;
+
+        Vector3 desiredVelocity =
+            (horizontalMove + verticalMove).normalized *
+            CurrentMaxSpeed *
+            Mathf.Clamp01((horizontalMove + verticalMove).magnitude);
+
+        // -------- SMOOTH VELOCITY --------
+        _rb.linearVelocity = Vector3.MoveTowards(
+            _rb.linearVelocity,
+            desiredVelocity,
+            flightAcceleration * Time.fixedDeltaTime
+        );
+
+        // -------- LEAN --------
+        Vector3 flatVel = _rb.linearVelocity;
+        flatVel.y = 0f;
+
+        if (flatVel.sqrMagnitude > 0.01f)
+        {
+            Vector3 leanAxis = Vector3.Cross(Vector3.up, flatVel.normalized);
+            Quaternion leanRot = Quaternion.AngleAxis(
+                flightLeanAngle,
+                leanAxis
+            );
+
+            Quaternion targetRot =
+                leanRot * Quaternion.LookRotation(flatVel.normalized, Vector3.up);
+
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRot,
+                flightLeanSmooth * Time.fixedDeltaTime
+            );
+        }
+        else
+        {
+            Vector3 lookDir = camForward;
+            lookDir.y = 0f;
+            if (lookDir.sqrMagnitude > 0.001f)
+                MaintainUpright(lookDir);
         }
     }
 
@@ -630,8 +718,6 @@ public class PhysicsBasedCharacterController : Character
         float velDot = Vector3.Dot(m_UnitGoal, unitVel);
         float accel = _acceleration * _accelerationFactorFromDot.Evaluate(velDot);
         Vector3 goalVel = m_UnitGoal * _currentMaxSpeed * _speedFactor;
-        Vector3 otherVel = Vector3.zero;
-        Rigidbody hitBody = rayHit.rigidbody;
         _m_GoalVel = Vector3.MoveTowards(_m_GoalVel,
                                         goalVel,
                                         accel * Time.fixedDeltaTime);

@@ -2,7 +2,9 @@ using UnityEngine;
 
 public abstract class AbilityEmitter : MonoBehaviour
 {
+    public AbilityType supportedType;
     [SerializeField] protected Transform firePoint;
+    [SerializeField] public GameObject abilityEffect;
     [SerializeField] public GameObject optionalHeldItem;
     [SerializeField] protected int abilityIndex = 0;
     protected PhysicsBasedCharacterController player;
@@ -18,4 +20,9 @@ public abstract class AbilityEmitter : MonoBehaviour
     }
 
     protected abstract void PerformFire(Abilities.Ability ability);
+
+    public bool Matches(AbilityType type, int index)
+    {
+        return supportedType == type && abilityIndex == index;
+    }
 }

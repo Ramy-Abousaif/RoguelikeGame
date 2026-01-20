@@ -3,15 +3,10 @@ using UnityEngine;
 
 public class AbilitiyEffects : MonoBehaviour
 {
-    private Abilities.Ability[] _abilities;
-
-    void Awake()
-    {
-        _abilities = transform.root.GetComponent<Abilities>().abilities;
-    }
 
     public void FireAbility(int index)
     {
+        var _abilities = transform.root.GetComponent<Abilities>().abilities;
         if (_abilities == null || index < 0 || index >= _abilities.Length)
             return;
 
@@ -19,16 +14,19 @@ public class AbilitiyEffects : MonoBehaviour
         if (a.abilityEmitter == null)
             return;
 
+        Debug.Log(a.abilityEmitter);
         a.abilityEmitter.Fire(a);
     }
 
     public void OnThrow(int index)
     {
+        var _abilities = transform.root.GetComponent<Abilities>().abilities;
         _abilities[index].abilityEmitter.optionalHeldItem.SetActive(false);
     }
 
     public void Restore(int index)
     {
+        var _abilities = transform.root.GetComponent<Abilities>().abilities;
         _abilities[index].abilityEmitter.optionalHeldItem.SetActive(true);
     }
 }

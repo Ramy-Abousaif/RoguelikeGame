@@ -216,8 +216,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8936646316444976821}
   - component: {fileID: 6761950343633686850}
-  - component: {fileID: 3777034712316347291}
-  - component: {fileID: 3913231045946413404}
+  - component: {fileID: 4733790738256678055}
+  - component: {fileID: -3814701319503383090}
   m_Layer: 9
   m_Name: Roar Effect
   m_TagString: Untagged
@@ -265,7 +265,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3777034712316347291
+--- !u!114 &4733790738256678055
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -274,11 +274,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8226681193282385452}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60bd02f6caeb5ac48b7bc38c2e8fb78f, type: 3}
+  m_Script: {fileID: 11500000, guid: 114d4e4c5010af4499c9a873e2b46f4c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RoarEffect
+  m_EditorClassIdentifier: Assembly-CSharp::ExplosionEffect
   sparksEffect: {fileID: 1621538424794724780}
---- !u!114 &3913231045946413404
+--- !u!114 &-3814701319503383090
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -287,12 +287,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8226681193282385452}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e7d79fa59a49fa42984aa396f3f7fb6, type: 3}
+  m_Script: {fileID: 11500000, guid: 2fdd07c7970ea0c45a228767cfc571fd, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AutoFadeDestroy
-  lifeTime: 5
-  fadeDuration: 1
-  fadeStyle: 0
+  m_EditorClassIdentifier: Assembly-CSharp::DestroyObject
+  delay: 2
 --- !u!1 &8249018786658674011
 GameObject:
   m_ObjectHideFlags: 0

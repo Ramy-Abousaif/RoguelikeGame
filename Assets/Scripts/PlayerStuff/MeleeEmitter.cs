@@ -14,9 +14,9 @@ public class MeleeEmitter : AbilityEmitter
         float radius = ability.currentAbilityRange;
         Vector3 center = firePoint.position;
 
-        if(ability.effectPrefab != null)
+        if(ability.abilityEmitter.abilityEffect != null)
         {
-            GameObject fx = Instantiate(ability.effectPrefab, center, quaternion.identity);
+            GameObject fx = Instantiate(ability.abilityEmitter.abilityEffect, center, quaternion.identity);
             fx.transform.localScale = new Vector3(radius, radius, radius);
         }
         else

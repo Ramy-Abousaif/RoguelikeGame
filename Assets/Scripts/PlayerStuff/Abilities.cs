@@ -1,15 +1,24 @@
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
+
+public enum AbilityType
+{
+    MELEE,
+    TRANSFORM,
+    PROJECTILE,
+    HITSCAN
+}
 
 public class Abilities : MonoBehaviour
 {
     [SerializeField] private Animator anim;
     [SerializeField] private PhysicsBasedCharacterController controller;
+    [SerializeField] private AbilityEmitter[] baseEmitters;
+    [SerializeField] private AbilityEmitter[] altEmitters;
     [Header("Strafing")]
     [SerializeField] private float strafingReleaseDelay = 0.25f;
-    private Vector3 _attackInput;
-    // ability system: abilities[0] == primary (hold-to-repeat)
+
     [System.Serializable]
     public class Ability
     {
@@ -17,10 +26,8 @@ public class Abilities : MonoBehaviour
         public int layerIndex = 1;
 
         [Header("Attack")]
-        public AbilityEmitter abilityEmitter;
-
-        public GameObject effectPrefab;
-        public Transform effectSpawnPoint;
+        public AbilityType abilityType;
+        [HideInInspector] public AbilityEmitter abilityEmitter;
 
         public float baseAbilityCooldown = 1f;
         
@@ -45,9 +52,7 @@ public class Abilities : MonoBehaviour
         [HideInInspector] public float playTimer = 0f;
     }
 
-    [SerializeField] private Ability[] _abilities = new Ability[4];
-    // getter and setter for abilities
-    public Ability[] abilities { get { return _abilities; } set { _abilities = value; } }
+    public Ability[] abilities { get { return _currentForm.abilities; } set { _currentForm.abilities = value; } }
 
     private float _primaryAttackTimer = 0f;   // time elapsed in current primary attack
     private bool _attackHeld = false;
@@ -61,32 +66,54 @@ public class Abilities : MonoBehaviour
     private float _targetLayerWeight = 0f;
 
     // cached primary clip accessor
-    private AnimationClip PrimaryClip => (_abilities != null && _abilities.Length > 0) ? _abilities[0].clip : null;
+    private AnimationClip PrimaryClip => (_currentForm.abilities != null && _currentForm.abilities.Length > 0) ? _currentForm.abilities[0].clip : null;
+
+    [Header("Forms")]
+    [SerializeField] private CharacterForm baseForm;
+    [SerializeField] private CharacterForm altForm;
+    [SerializeField] private Material[] mats;
+
+    [SerializeField] private CharacterForm _currentForm;
+    private float _currentFormAmount;
+    private Coroutine _formRoutine;
 
     private void Start()
     {
-        controller = GetComponent<PhysicsBasedCharacterController>();
-        // ensure abilities array length is 4
-        if (_abilities == null || _abilities.Length != 4)
-        {
-            _abilities = new Ability[4];
-            for (int i = 0; i < 4; i++) _abilities[i] = new Ability();
-        }
+        if (controller == null)
+            controller = GetComponent<PhysicsBasedCharacterController>();
 
         // initialize clips for all abilities
-        for (int i = 0; i < _abilities.Length; i++)
+        for (int i = 0; i < _currentForm.abilities.Length; i++)
         {
-            _abilities[i].currentAbilityCooldown = _abilities[i].baseAbilityCooldown;
-            _abilities[i].currentAbilityRange = _abilities[i].baseAbilityRange;
-            _abilities[i].currentAbilitySpeed = _abilities[i].baseAbilitySpeed;
-            _abilities[i].currentAbilityDamage = _abilities[i].baseAbilityDamage;
-            controller.Anim.SetFloat("AbilitySpeed" + (i + 1), _abilities[i].currentAbilitySpeed);
+            SetupEmitter(i);
+            _currentForm.abilities[i].currentAbilityCooldown = _currentForm.abilities[i].baseAbilityCooldown;
+            _currentForm.abilities[i].currentAbilityRange = _currentForm.abilities[i].baseAbilityRange;
+            _currentForm.abilities[i].currentAbilitySpeed = _currentForm.abilities[i].baseAbilitySpeed;
+            _currentForm.abilities[i].currentAbilityDamage = _currentForm.abilities[i].baseAbilityDamage;
+            controller.Anim.SetFloat("AbilitySpeed" + (i + 1), _currentForm.abilities[i].currentAbilitySpeed);
 
-            if (!string.IsNullOrEmpty(_abilities[i].stateName) && anim != null)
-                _abilities[i].clip = FindAnimation(_abilities[i].stateName);
+            if (!string.IsNullOrEmpty(_currentForm.abilities[i].stateName) && anim != null)
+                _currentForm.abilities[i].clip = FindAnimation(_currentForm.abilities[i].stateName);
         }
-        if (controller == null)
-            controller = GetComponentInParent<PhysicsBasedCharacterController>();
+    }
+
+    private void SetupEmitter(int i)
+    {
+        var emitters = _currentForm == baseForm ? baseEmitters : altEmitters;
+        var ability = _currentForm.abilities[i];
+
+        foreach (var e in emitters)
+        {
+            if (e.Matches(ability.abilityType, i))
+            {
+                ability.abilityEmitter = e;
+                return;
+            }
+        }
+
+        Debug.LogWarning(
+            $"No emitter found for ability index {i} ({ability.abilityType}) in form {_currentForm.name}"
+        );
     }
 
     /// <summary>
@@ -95,36 +122,33 @@ public class Abilities : MonoBehaviour
     /// <param name="context">The attack input's context.</param>
     public void Ability1InputAction(InputAction.CallbackContext context)
     {
-        float attackContext = context.ReadValue<float>();
-        _attackInput = new Vector3(0, attackContext, 0);
-
-        if (context.started || context.performed)
+        if (context.performed)
         {
+            _attackHeld = true;
             TryUseAbility(0);
         }
 
         if (context.canceled)
         {
             _attackHeld = false;
-            // do not stop immediately: let current attack finish (so attack lasts until delay is over)
         }
     }
 
     public void Ability2InputAction(InputAction.CallbackContext context)
     {
-        if (context.started || context.performed)
+        if (!context.performed) return;
             TryUseAbility(1);
     }
 
     public void Ability3InputAction(InputAction.CallbackContext context)
     {
-        if (context.started || context.performed)
+        if (!context.performed) return;
             TryUseAbility(2);
     }
 
     public void Ability4InputAction(InputAction.CallbackContext context)
     {
-        if (context.started || context.performed)
+        if (!context.performed) return;
             TryUseAbility(3);
     }
 
@@ -136,24 +160,93 @@ public class Abilities : MonoBehaviour
         if (anim != null)
         {
             // set target weight to 1; actual layer weight will interpolate in Update (primary)
-            int attackLayerIndex = _abilities[index].layerIndex;
+            int attackLayerIndex = _currentForm.abilities[index].layerIndex;
             if (anim.layerCount > attackLayerIndex)
                 _targetLayerWeight = 1f;
             anim.SetBool("isAttacking", true);
             anim.SetInteger("AbilityIndex", index);
             // replay the attack state so the animation restarts even when the bool is already true
-            anim.Play(_abilities[index].stateName, attackLayerIndex, 0f);
+            anim.Play(_currentForm.abilities[index].stateName, attackLayerIndex, 0f);
         }
 
         _primaryAttackTimer = 0f;
     }
 
-    public void SpawnEffectAtAbility(int index)
+    public void ApplyForm(CharacterForm newForm, float blendTime)
     {
-        if(_abilities[index].effectPrefab != null)
+        if (_formRoutine != null)
+            StopCoroutine(_formRoutine);
+
+        _formRoutine = StartCoroutine(FormRoutine(newForm, blendTime));
+    }
+
+    public void ApplyTimedForm(CharacterForm form, float blendIn, float duration, float blendOut)
+    {
+        StartCoroutine(TimedFormRoutine(form, blendIn, duration, blendOut));
+    }
+
+    private IEnumerator TimedFormRoutine(CharacterForm form, float blendIn, float duration, float blendOut)
+    {
+        ApplyForm(form, blendIn);
+        yield return new WaitForSeconds(duration);
+        ApplyForm(baseForm, blendOut);
+    }
+
+
+    private IEnumerator FormRoutine(CharacterForm newForm, float blendTime)
+    {
+        _currentForm = newForm;
+
+        float start = _currentFormAmount;
+        float target = (newForm == baseForm) ? 0f : 1f;
+
+        // === APPLY GAMEPLAY STATE IMMEDIATELY ===
+        controller.CurrentMaxSpeed =
+            controller.BaseMaxSpeed * newForm.moveSpeedMultiplier;
+
+        controller.attackSpeed = newForm.damageMultiplier;
+        controller.EnableFlight(newForm.canFly);
+
+        if (newForm.abilities != null)
         {
-            Instantiate(_abilities[index].effectPrefab, transform.position, Quaternion.identity);
+            abilities = newForm.abilities;
         }
+
+        for(int i = 0; i < newForm.abilities.Length; i++)
+        {
+            SetupEmitter(i);
+        }
+
+        // === BLEND VISUALS ===
+        float elapsed = 0f;
+
+        while (elapsed < blendTime)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / blendTime;
+
+            _currentFormAmount = Mathf.Lerp(start, target, t);
+            SetFormAmount(_currentFormAmount);
+
+            yield return null;
+        }
+
+        _currentFormAmount = target;
+        SetFormAmount(target);
+    }
+
+    private void SetFormAmount(float value)
+    {
+        foreach (var mat in mats)
+        {
+            if (mat.HasProperty("_FormAmount"))
+                mat.SetFloat("_FormAmount", value);
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        SetFormAmount(0);
     }
 
     private void StopAttack()
@@ -164,7 +257,7 @@ public class Abilities : MonoBehaviour
         if (anim != null)
         {
             // set target weight to 0; actual layer weight will interpolate in Update
-            int attackLayerIndex = _abilities[0].layerIndex;
+            int attackLayerIndex = _currentForm.abilities[0].layerIndex;
             if (anim.layerCount > attackLayerIndex)
                 _targetLayerWeight = 0f;
             anim.SetBool("isAttacking", false);
@@ -173,7 +266,7 @@ public class Abilities : MonoBehaviour
 
     public void OnHit(Enemy enemy, int abilityIndex)
     {
-        enemy.TakeDamage(_abilities[abilityIndex].currentAbilityDamage, true);
+        enemy.TakeDamage(_currentForm.abilities[abilityIndex].currentAbilityDamage, true);
     }
 
     // Update is called once per frame
@@ -193,10 +286,10 @@ public class Abilities : MonoBehaviour
                     _primaryAttackTimer = 0f;
                     if (anim != null)
                     {
-                        int attackLayerIndex = _abilities[0].layerIndex;
+                        int attackLayerIndex = _currentForm.abilities[0].layerIndex;
                         if (anim.layerCount > attackLayerIndex)
                         {
-                            anim.Play(_abilities[0].stateName, attackLayerIndex, 0f);
+                            anim.Play(_currentForm.abilities[0].stateName, attackLayerIndex, 0f);
                         }
                     }
                 }
@@ -208,11 +301,11 @@ public class Abilities : MonoBehaviour
         }
 
         // Other abilities: update cooldowns and playing timers
-        if (_abilities != null)
+        if (_currentForm.abilities != null)
         {
-            for (int i = 1; i < _abilities.Length; i++)
+            for (int i = 1; i < _currentForm.abilities.Length; i++)
             {
-                var a = _abilities[i];
+                var a = _currentForm.abilities[i];
                 if (a == null) continue;
                 if (a.cooldownTimer > 0f)
                     a.cooldownTimer = Mathf.Max(0f, a.cooldownTimer - dt);
@@ -237,9 +330,9 @@ public class Abilities : MonoBehaviour
 
         // interpolate layer weight towards target
         // interpolate primary layer weight towards target
-        if (_abilities != null && _abilities.Length > 0)
+        if (_currentForm.abilities != null && _currentForm.abilities.Length > 0)
         {
-            int attackLayerIndex = _abilities[0].layerIndex;
+            int attackLayerIndex = _currentForm.abilities[0].layerIndex;
             if (anim != null && anim.layerCount > attackLayerIndex)
             {
                 _currentLayerWeight = Mathf.SmoothDamp(_currentLayerWeight, _targetLayerWeight, ref _layerWeightVelocity, layerWeightSmoothTime);
@@ -265,9 +358,16 @@ public class Abilities : MonoBehaviour
 
     private void TryUseAbility(int index)
     {
-        if (_abilities == null || index < 0 || index >= _abilities.Length) return;
-        var a = _abilities[index];
+        if (_currentForm.abilities == null || index < 0 || index >= _currentForm.abilities.Length) return;
+        var a = _currentForm.abilities[index];
         if (a == null) return;
+
+        if (a.abilityEmitter.supportedType == AbilityType.TRANSFORM)
+        {
+            a.abilityEmitter.Fire(a);
+            return;
+        }
+
         // Primary is hold-to-repeat and handled separately
         if (index == 0)
         {

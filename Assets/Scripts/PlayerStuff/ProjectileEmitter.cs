@@ -4,6 +4,7 @@ public class ProjectileEmitter : AbilityEmitter
 {
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private float baseLaunchForce = 25f;
+    [SerializeField] private float baseRange = 10f;
     [SerializeField] private float spin = 20f;
     
     protected override void PerformFire(Abilities.Ability ability)
@@ -18,10 +19,10 @@ public class ProjectileEmitter : AbilityEmitter
 
         rb.linearVelocity = Vector3.zero;
 
-        float force = baseLaunchForce * ability.currentAbilitySpeed;
+        float force = baseLaunchForce;
         Vector3 dir = Camera.main.transform.forward;
 
-        rb.AddForce(dir * force, ForceMode.VelocityChange);
+        rb.AddForce(dir * force);
         rb.AddTorque(firePoint.up * spin, ForceMode.VelocityChange);
 
         if (proj.TryGetComponent(out Projectile projectile))
@@ -29,7 +30,7 @@ public class ProjectileEmitter : AbilityEmitter
             projectile.SetPlayer(player);
             projectile.SetAbilityIndex(abilityIndex);
             projectile.SetDamage(ability.currentAbilityDamage);
-            projectile.SetRange(ability.currentAbilityRange);
+            projectile.SetRange(ability.currentAbilityRange * baseRange);
             projectile.SetScale(ability.currentAbilityRange);
         }
     }

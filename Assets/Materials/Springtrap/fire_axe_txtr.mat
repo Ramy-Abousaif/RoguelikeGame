@@ -105,9 +105,10 @@ Material:
     - _EMISSION: 1
     - _EnvironmentReflections: 1
     - _FlashAmount: 0
-    - _FormAmount: -0
+    - _FormAmount: 0
     - _FresnelAmount: 2
     - _Gamma: 1
+    - _GlitchStrength: 0.5
     - _GlossMapScale: 1
     - _Glossiness: 0.59999996
     - _GlossyReflections: 1

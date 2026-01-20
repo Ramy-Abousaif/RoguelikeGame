@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7da096c3f12c5845bd2bebab64a2fd2, type: 3}
+  m_Name: BaseSpringtrap
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterForm
+  moveSpeedMultiplier: 1
+  damageMultiplier: 1
+  canFly: 0
+  abilities:
+  - stateName: Main Attack
+    layerIndex: 1
+    abilityType: 2
+    abilityEmitter: {fileID: 0}
+    baseAbilityCooldown: 0
+    currentAbilityCooldown: 0
+    baseAbilityRange: 2
+    currentAbilityRange: 2
+    baseAbilitySpeed: 2
+    currentAbilitySpeed: 2
+    baseAbilityDamage: 10
+    currentAbilityDamage: 10
+    affectedByAttackSpeed: 1
+    cooldownTimer: 0
+    clip: {fileID: 7400000, guid: 0c9c1b5af45660b4b847909d66f7abe8, type: 2}
+    isPlaying: 0
+    playTimer: 0
+  - stateName: Secondary Attack
+    layerIndex: 1
+    abilityType: 0
+    abilityEmitter: {fileID: 0}
+    baseAbilityCooldown: 5
+    currentAbilityCooldown: 5
+    baseAbilityRange: 4
+    currentAbilityRange: 4
+    baseAbilitySpeed: 2
+    currentAbilitySpeed: 2
+    baseAbilityDamage: 50
+    currentAbilityDamage: 50
+    affectedByAttackSpeed: 0
+    cooldownTimer: 0
+    clip: {fileID: 7400000, guid: 1b45ecd8fefd2e0499ac495d04299860, type: 2}
+    isPlaying: 0
+    playTimer: 0
+  - stateName: Third Attack
+    layerIndex: 1
+    abilityType: 2
+    abilityEmitter: {fileID: 0}
+    baseAbilityCooldown: 5
+    currentAbilityCooldown: 5
+    baseAbilityRange: 2
+    currentAbilityRange: 2
+    baseAbilitySpeed: 2
+    currentAbilitySpeed: 2
+    baseAbilityDamage: 40
+    currentAbilityDamage: 40
+    affectedByAttackSpeed: 0
+    cooldownTimer: 1.7957484
+    clip: {fileID: 0}
+    isPlaying: 0
+    playTimer: 0
+  - stateName: 
+    layerIndex: 1
+    abilityType: 1
+    abilityEmitter: {fileID: 0}
+    baseAbilityCooldown: 0
+    currentAbilityCooldown: 0
+    baseAbilityRange: 0
+    currentAbilityRange: 0
+    baseAbilitySpeed: 0
+    currentAbilitySpeed: 0
+    baseAbilityDamage: 0
+    currentAbilityDamage: 0
+    affectedByAttackSpeed: 0
+    cooldownTimer: 0
+    clip: {fileID: 0}
+    isPlaying: 0
+    playTimer: 0
