@@ -48,20 +48,26 @@ public class IKFootSolver : MonoBehaviour
                 // stepLength should offset forward/back relative to the body, not up
                 newPosition = info.point + (body.forward * stepLength * direction) + footOffset;
                 newNormal = info.normal;
-                GameObject impactFX = Instantiate(impact, newPosition, Quaternion.Euler(newNormal));
-                Renderer rend = info.collider.GetComponent<Renderer>();
-                MeshCollider meshCollider = info.collider as MeshCollider;
-
-                if (rend != null && meshCollider != null)
+                if(impact != null)
                 {
-                    Texture2D tex = rend.material.mainTexture as Texture2D;
-                    Vector2 uv = info.textureCoord;
-
-                    Color pixelColor = tex.GetPixelBilinear(uv.x, uv.y);
-                    ParticleSystem.MainModule ps = impact.GetComponent<ParticleSystem>().main;
-                    ps.startColor = pixelColor;
+                    GameObject impactFX = Instantiate(impact, newPosition, Quaternion.Euler(newNormal));                    
                 }
-                GameObject impactDecalGO = Instantiate(impactDecal, newPosition + (newNormal.normalized * 0.1f), Quaternion.LookRotation(-newNormal));
+                if(impactDecal != null)
+                {
+                    Renderer rend = info.collider.GetComponent<Renderer>();
+                    MeshCollider meshCollider = info.collider as MeshCollider;
+
+                    if (rend != null && meshCollider != null)
+                    {
+                        Texture2D tex = rend.material.mainTexture as Texture2D;
+                        Vector2 uv = info.textureCoord;
+
+                        Color pixelColor = tex.GetPixelBilinear(uv.x, uv.y);
+                        ParticleSystem.MainModule ps = impact.GetComponent<ParticleSystem>().main;
+                        ps.startColor = pixelColor;
+                    }
+                    GameObject impactDecalGO = Instantiate(impactDecal, newPosition + (newNormal.normalized * 0.1f), Quaternion.LookRotation(-newNormal));   
+                }
             }
         }
 

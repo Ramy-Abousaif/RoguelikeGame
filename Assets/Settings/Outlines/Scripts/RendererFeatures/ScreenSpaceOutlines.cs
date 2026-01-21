@@ -76,7 +76,7 @@ public class ScreenSpaceOutlines : ScriptableRendererFeature {
             screenSpaceOutlineMaterial.SetFloat("_SteepAngleThreshold", settings.steepAngleThreshold);
             screenSpaceOutlineMaterial.SetFloat("_SteepAngleMultiplier", settings.steepAngleMultiplier);
             
-            filteringSettings = new FilteringSettings(RenderQueueRange.all, layerMask);
+            filteringSettings = new FilteringSettings(RenderQueueRange.opaque, layerMask);
 
             shaderTagIdList = new List<ShaderTagId> {
                 new ShaderTagId("UniversalForward"),
