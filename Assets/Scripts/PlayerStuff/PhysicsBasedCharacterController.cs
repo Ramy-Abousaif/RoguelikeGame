@@ -385,11 +385,11 @@ public class PhysicsBasedCharacterController : Character
         if (flatVel.sqrMagnitude > 0.01f)
         {
             Vector3 leanAxis = Vector3.Cross(Vector3.up, flatVel.normalized);
-            Quaternion leanRot = Quaternion.AngleAxis(
-                flightLeanAngle,
-                leanAxis
-            );
 
+            float speed01 = Mathf.Clamp01(flatVel.magnitude / CurrentMaxSpeed);
+            float leanAmount = flightLeanAngle * speed01;
+
+            Quaternion leanRot = Quaternion.AngleAxis(leanAmount, leanAxis);
             Quaternion targetRot =
                 leanRot * Quaternion.LookRotation(flatVel.normalized, Vector3.up);
 
@@ -403,8 +403,20 @@ public class PhysicsBasedCharacterController : Character
         {
             Vector3 lookDir = camForward;
             lookDir.y = 0f;
+
             if (lookDir.sqrMagnitude > 0.001f)
-                MaintainUpright(lookDir);
+            {
+                Quaternion uprightRot = Quaternion.LookRotation(
+                    lookDir.normalized,
+                    Vector3.up
+                );
+
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation,
+                    uprightRot,
+                    flightLeanSmooth * Time.fixedDeltaTime
+                );
+            }
         }
     }
 

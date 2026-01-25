@@ -30,7 +30,7 @@ public class MeleeEmitter : AbilityEmitter
         {
             if (col.TryGetComponent(out Enemy enemy))
             {
-                player.abilities.OnHit(enemy, abilityIndex);
+                player.abilities.OnHit(enemy, abilityIndex, true);
                 player.CallItemOnHit(enemy);
             }
         }

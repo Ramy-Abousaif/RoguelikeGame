@@ -84,11 +84,11 @@ MonoBehaviour:
     BlitMaterial: {fileID: 2100000, guid: b39312f2ccad79640a3b74d64475a027, type: 2}
     ClearDepth: 0
   MaterialSettings:
-    OutlineScale: 0.55
-    RobertsCrossMultiplier: 50
+    OutlineScale: 0.5
+    RobertsCrossMultiplier: 31.79
     DepthThreshold: 21.5
-    NormalThreshold: 0.4
-    SteepAngleThreshold: 0.2
+    NormalThreshold: 0.76
+    SteepAngleThreshold: 0.11
     SteepAngleMultiplier: 25
     OutlineColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &2673517899826445053
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Xenon.OutlineRenderFeature
   m_Active: 1
   FeatureSettings:
-    RenderPassEvent: 500
+    RenderPassEvent: 450
     LayerMask:
       serializedVersion: 2
       m_Bits: 4096

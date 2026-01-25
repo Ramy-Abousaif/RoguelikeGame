@@ -38,11 +38,11 @@ Material:
     m_Ints: []
     m_Floats:
     - _DepthThreshold: 21.5
-    - _NormalThreshold: 0.4
-    - _OutlineScale: 0.55
-    - _RobertsCrossMultiplier: 50
+    - _NormalThreshold: 0.76
+    - _OutlineScale: 0.5
+    - _RobertsCrossMultiplier: 31.79
     - _SteepAngleMultiplier: 25
-    - _SteepAngleThreshold: 0.2
+    - _SteepAngleThreshold: 0.11
     m_Colors:
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

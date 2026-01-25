@@ -10,6 +10,9 @@ public enum HitscanMode
 
 public class HitscanEmitter : AbilityEmitter
 {
+    [Header("Effects")]
+    [SerializeField] private GameObject impactFX;
+    
     [Header("Hitscan")]
     [SerializeField] private LayerMask hitMask;
     [SerializeField] private float baseRange = 100f;
@@ -158,6 +161,7 @@ public class HitscanEmitter : AbilityEmitter
         if (Physics.Raycast(ray, out RaycastHit hit, range, hitMask))
         {
             cam.GetComponent<CameraShake>().ShakeCamera(2, 1, 0.3f);
+            Instantiate(impactFX, hit.point, Quaternion.LookRotation(hit.normal));
             if (hit.collider.TryGetComponent(out Enemy enemy))
             {
                 player.abilities.OnHit(enemy, abilityIndex);

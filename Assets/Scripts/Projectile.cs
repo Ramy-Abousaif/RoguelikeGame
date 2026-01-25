@@ -10,6 +10,7 @@ public class Projectile : MonoBehaviour
     private float forceDestroyTimer = 0f;
     private float forceDestroyCapacity = 5f;
     private PhysicsBasedCharacterController player;
+    [SerializeField] private GameObject impactFX;
 
     public void Awake()
     {
@@ -27,9 +28,10 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Instantiate(impactFX, transform.position, Quaternion.identity);
         if (other.transform.TryGetComponent(out Enemy enemy))
         {
-            player.abilities.OnHit(enemy, abilityIndex);
+            player.abilities.OnHit(enemy, abilityIndex, true);
             player.CallItemOnHit(enemy);
             Destroy(gameObject);
         }

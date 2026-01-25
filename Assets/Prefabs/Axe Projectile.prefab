@@ -276,6 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad70b57a395c8b45b4228b098b4b225, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
+  impactFX: {fileID: 9113980464775257051, guid: b9717ca208437cb41a44a153de3f14f7, type: 3}
 --- !u!1 &8801293097872268572
 GameObject:
   m_ObjectHideFlags: 0
