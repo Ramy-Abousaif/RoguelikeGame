@@ -17,6 +17,7 @@ MonoBehaviour:
   canFly: 0
   abilities:
   - stateName: Main Attack
+    icon: {fileID: 21300000, guid: b88cc71220ca98e4da564adfd48118e2, type: 3}
     layerIndex: 1
     useAnimationEvent: 1
     abilityType: 2
@@ -35,6 +36,7 @@ MonoBehaviour:
     isPlaying: 0
     playTimer: 0
   - stateName: Secondary Attack
+    icon: {fileID: 21300000, guid: e4c4a9218a5142c479eee67b06193073, type: 3}
     layerIndex: 1
     useAnimationEvent: 1
     abilityType: 0
@@ -48,11 +50,12 @@ MonoBehaviour:
     baseAbilityDamage: 50
     currentAbilityDamage: 50
     affectedByAttackSpeed: 0
-    cooldownTimer: 0.32453197
+    cooldownTimer: 0
     clip: {fileID: 7400000, guid: 1b45ecd8fefd2e0499ac495d04299860, type: 2}
     isPlaying: 0
     playTimer: 0
   - stateName: Third Attack
+    icon: {fileID: 21300000, guid: 1bc66be82db33cd41b3d836423cbca9f, type: 3}
     layerIndex: 1
     useAnimationEvent: 1
     abilityType: 2
@@ -66,17 +69,18 @@ MonoBehaviour:
     baseAbilityDamage: 40
     currentAbilityDamage: 40
     affectedByAttackSpeed: 0
-    cooldownTimer: 3.469391
+    cooldownTimer: 0
     clip: {fileID: 7400000, guid: 83afbb8aad3cbcc41b5ff19112b69806, type: 2}
     isPlaying: 0
     playTimer: 0
   - stateName: 
+    icon: {fileID: 21300000, guid: 09b40c919ed98dc4388d665183a8d132, type: 3}
     layerIndex: 1
-    useAnimationEvent: 1
+    useAnimationEvent: 0
     abilityType: 1
     abilityEmitter: {fileID: 0}
-    baseAbilityCooldown: 0
-    currentAbilityCooldown: 0
+    baseAbilityCooldown: 180
+    currentAbilityCooldown: 180
     baseAbilityRange: 0
     currentAbilityRange: 0
     baseAbilitySpeed: 0

@@ -276,7 +276,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad70b57a395c8b45b4228b098b4b225, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
-  impactFX: {fileID: 9113980464775257051, guid: b9717ca208437cb41a44a153de3f14f7, type: 3}
+  stickable: 1
+  rotXOffset: 180
+  rotZOffset: 90
+  impactFX: {fileID: 0}
+  ongoingEffect: {fileID: 2596678700195787102}
+  stickLifetime: 2
+  shrinkDuration: 1
+  wiggleAmplitude: 12
+  wiggleFrequency: 22
+  shrinkCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &8801293097872268572
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,6 +475,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f60e5ec5b188e0c4e86034e767fee837, type: 3}
+--- !u!1 &2596678700195787102 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2906088118271505414, guid: f60e5ec5b188e0c4e86034e767fee837, type: 3}
+  m_PrefabInstance: {fileID: 890936721048356184}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4841338869490710540 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5724878006472195412, guid: f60e5ec5b188e0c4e86034e767fee837, type: 3}

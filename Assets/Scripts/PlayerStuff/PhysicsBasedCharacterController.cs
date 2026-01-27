@@ -21,6 +21,7 @@ public class PhysicsBasedCharacterController : Character
     private Vector3 _rayDir = Vector3.down;
     private Vector3 _previousVelocity = Vector3.zero;
     private Vector2 _moveContext;
+    private bool movementEnabled = true;
 
     [Header("Other:")]
     [SerializeField] private bool _adjustInputsToCameraAngle = false;
@@ -614,6 +615,11 @@ public class PhysicsBasedCharacterController : Character
         }
     }
 
+    public void SetMovementEnabled(bool enabled)
+    {
+        movementEnabled = enabled;
+    }
+
     /// <summary>
     /// Adds torque to the character to keep the character upright, acting as a torsional oscillator (i.e. vertically flipped pendulum).
     /// </summary>
@@ -643,6 +649,9 @@ public class PhysicsBasedCharacterController : Character
     /// <param name="context">The move input's context.</param>
     public void MoveInputAction(InputAction.CallbackContext context)
     {
+        if(!movementEnabled)
+            return;
+            
         _moveContext = context.ReadValue<Vector2>();
     }
 

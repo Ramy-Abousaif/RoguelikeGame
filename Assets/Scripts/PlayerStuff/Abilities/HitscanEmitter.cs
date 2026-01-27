@@ -164,7 +164,7 @@ public class HitscanEmitter : AbilityEmitter
             Instantiate(impactFX, hit.point, Quaternion.LookRotation(hit.normal));
             if (hit.collider.TryGetComponent(out Enemy enemy))
             {
-                player.abilities.OnHit(enemy, abilityIndex);
+                player.abilities.OnHit(enemy, abilityIndex, true);
                 player.CallItemOnHit(enemy);
             }
         }

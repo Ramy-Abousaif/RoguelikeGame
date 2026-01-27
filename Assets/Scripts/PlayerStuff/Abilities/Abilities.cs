@@ -1,13 +1,17 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using UnityEngine.UI;
+using TMPro;
 
 public enum AbilityType
 {
     MELEE,
     TRANSFORM,
     PROJECTILE,
-    HITSCAN
+    HITSCAN,
+    BLINK,
+    BLANK
 }
 
 public class Abilities : MonoBehaviour
@@ -23,6 +27,7 @@ public class Abilities : MonoBehaviour
     public class Ability
     {
         public string stateName = "Main Attack";
+        public Sprite icon;
         public int layerIndex = 1;
         public bool useAnimationEvent = true;
 
@@ -91,6 +96,7 @@ public class Abilities : MonoBehaviour
             _currentForm.abilities[i].currentAbilityRange = _currentForm.abilities[i].baseAbilityRange;
             _currentForm.abilities[i].currentAbilitySpeed = _currentForm.abilities[i].baseAbilitySpeed;
             _currentForm.abilities[i].currentAbilityDamage = _currentForm.abilities[i].baseAbilityDamage;
+            _currentForm.abilities[i].cooldownTimer = 0.0f;
             controller.Anim.SetFloat("AbilitySpeed" + (i + 1), _currentForm.abilities[i].currentAbilitySpeed);
 
             if (!string.IsNullOrEmpty(_currentForm.abilities[i].stateName) && anim != null)
@@ -103,6 +109,8 @@ public class Abilities : MonoBehaviour
         var emitters = _currentForm == baseForm ? baseEmitters : altEmitters;
         var ability = _currentForm.abilities[i];
 
+        UIManager.Instance.SetupAbilityIcons(i, _currentForm.abilities[i].cooldownTimer, _currentForm.abilities[i].icon);
+
         foreach (var e in emitters)
         {
             if (e.Matches(ability.abilityType, i))
@@ -111,6 +119,8 @@ public class Abilities : MonoBehaviour
                 return;
             }
         }
+
+
 
         Debug.LogWarning(
             $"No emitter found for ability index {i} ({ability.abilityType}) in form {_currentForm.name}"
@@ -331,6 +341,7 @@ public class Abilities : MonoBehaviour
         {
             for (int i = 1; i < _currentForm.abilities.Length; i++)
             {
+                UIManager.Instance.UpdateCooldown(i, _currentForm.abilities[i].cooldownTimer, _currentForm.abilities[i].currentAbilityCooldown);
                 var a = _currentForm.abilities[i];
                 if (a == null) continue;
                 if (a.cooldownTimer > 0f)
@@ -367,7 +378,6 @@ public class Abilities : MonoBehaviour
             }
         }
     }
-
     
     public AnimationClip FindAnimation (string name) 
     {
@@ -406,9 +416,18 @@ public class Abilities : MonoBehaviour
             return;
         }
 
-        if (a.abilityEmitter.supportedType == AbilityType.TRANSFORM && !_isAttacking)
+        if ((a.abilityEmitter.supportedType == AbilityType.TRANSFORM ||
+            a.abilityEmitter.supportedType == AbilityType.BLINK) &&
+            !_isAttacking)
         {
+            if (a.cooldownTimer > 0f)
+                return;
+
             a.abilityEmitter.Fire(a);
+
+            // START COOLDOWN IMMEDIATELY
+            a.cooldownTimer = a.currentAbilityCooldown;
+
             return;
         }
 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
-    [SerializeField] private CinemachineCamera cam;
+    public CinemachineCamera cam;
     private float shakeTime;
 
     void Update()

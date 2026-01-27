@@ -142,6 +142,11 @@ public abstract class Character : MonoBehaviour
 
         OnDamageTaken(finalDamage, direct);
 
+        if(direct)
+        {
+            UIManager.Instance.ShowHitmarker();
+        }
+
         if (currentHealth <= 0f)
         {
             Die();
