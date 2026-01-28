@@ -6,6 +6,10 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
+    [Header("Player Stats")]
+    [SerializeField] private Image healthBar;
+    [SerializeField] private TMP_Text healthNumber;
+
     [Header("Abilities")]
     [SerializeField] private Image[] abilityBGIcons;
     [SerializeField] private Image[] abilityIcons;
@@ -25,6 +29,13 @@ public class UIManager : MonoBehaviour
         Instance = this;
     }
 
+    public void UpdateHealth(float currentHealth, float maxHealth)
+    {
+        float fill = 1 - NormalizeFill(currentHealth, maxHealth);
+        healthBar.fillAmount = fill;
+        healthNumber.text = currentHealth.ToString("N0") + "/" + maxHealth.ToString("N0");
+    }
+
     public void SetupAbilityIcons(int i, float timer, Sprite icon)
     {
         float cdTimer = timer;
@@ -42,19 +53,19 @@ public class UIManager : MonoBehaviour
 
     public void UpdateCooldown(int index, float timer, float duration)
     {
-        float fill = CooldownToFill(timer, duration);
+        float fill = NormalizeFill(timer, duration);
         abilityIcons[index].fillAmount = fill;
 
         abilityCDTexts[index].gameObject.SetActive(timer > 0f);
         abilityCDTexts[index].text = timer.ToString("N1");
     }
 
-    public static float CooldownToFill(float cooldownTimer, float cooldownDuration)
+    public static float NormalizeFill(float currentFill, float fillMax)
     {
-        if (cooldownDuration <= 0f)
+        if (fillMax <= 0f)
             return 1f;
 
-        return Mathf.Clamp01(1f - (cooldownTimer / cooldownDuration));
+        return Mathf.Clamp01(1f - (currentFill / fillMax));
     }
 
     public void ShowHitmarker()

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Projectile : MonoBehaviour
 {
@@ -10,18 +11,20 @@ public class Projectile : MonoBehaviour
     private float forceDestroyTimer = 0f;
     private float forceDestroyCapacity = 5f;
     private PhysicsBasedCharacterController player;
+    private MaterialPropertyBlock _mpb;
+    private Renderer[] _renderers;
+
     [Header("Impact")]
     [SerializeField] private bool stickable;
     [SerializeField] private float rotXOffset, rotZOffset;
     [SerializeField] private GameObject impactFX;
     [SerializeField, Tooltip("If prefab has an ongoing effect and you want to disable it, assign effect here")] private GameObject ongoingEffect;
 
-    [Header("Stick Fade")]
-    [SerializeField] private float stickLifetime = 1.2f;
-    [SerializeField] private float shrinkDuration = 0.35f;
-    [SerializeField] private float wiggleAmplitude = 6f;
-    [SerializeField] private float wiggleFrequency = 18f;
-    [SerializeField] private AnimationCurve shrinkCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
+    [Header("Dissolve")]
+    [SerializeField] private float dissolveDelay = 1.0f;
+    [SerializeField] private float dissolveDuration = 0.4f;
+    [SerializeField] private VisualEffect[] vfx;
+
     private bool hasHit = false;
     private float rotYOffset;
 
@@ -29,6 +32,8 @@ public class Projectile : MonoBehaviour
     {
         startPos = transform.position;
         rotYOffset = transform.eulerAngles.y;
+        _renderers = GetComponentsInChildren<Renderer>();
+        _mpb = new MaterialPropertyBlock();
     }
 
     private void Update()
@@ -51,9 +56,10 @@ public class Projectile : MonoBehaviour
         Vector3 contactPoint = transform.position;
         Vector3 contactNormal = Vector3.up;
 
-        if (other.TryGetComponent(out MeshCollider meshCol) && meshCol.sharedMesh != null)
+        if (other.TryGetComponent(out Collider col))
         {
-            contactNormal = meshCol.transform.up;
+            Debug.Log(col.transform.gameObject.name);
+            contactNormal = col.transform.forward;
         }
 
         StickIntoSurface(other, contactPoint, contactNormal);
@@ -87,44 +93,56 @@ public class Projectile : MonoBehaviour
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.isKinematic = true;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
         }
 
         if (impactFX != null)
             Instantiate(impactFX, contactPoint, Quaternion.identity);
 
-        StartCoroutine(StickDecayRoutine());
+        StartCoroutine(DissolveRoutine());
     }
 
-    private IEnumerator StickDecayRoutine()
+    private IEnumerator DissolveRoutine()
     {
-        Vector3 startScale = transform.localScale;
-        Quaternion baseRotation = transform.rotation;
-
-        // Optional pause before decay
-        yield return new WaitForSeconds(stickLifetime);
+        yield return new WaitForSeconds(dissolveDelay);
 
         float elapsed = 0f;
 
-        while (elapsed < shrinkDuration)
+        if(vfx.Length > 0)
+        {
+            for(int i = 0; i < vfx.Length; i++)
+            {
+                vfx[i].Play();
+                vfx[i].SetFloat("Duration", dissolveDuration);
+            }
+        }
+
+        while (elapsed < dissolveDuration)
         {
             elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / shrinkDuration);
+            float t = Mathf.Clamp01(elapsed / dissolveDuration);
 
-            // Shrink
-            float scale = shrinkCurve.Evaluate(t);
-            transform.localScale = startScale * scale;
-
-            // Wiggle (small local rotation noise)
-            float wiggle =
-                Mathf.Sin(Time.time * wiggleFrequency) * wiggleAmplitude * (1f - t);
-
-            transform.rotation = baseRotation * Quaternion.Euler(0f, 0f, wiggle);
+            foreach(Renderer r in _renderers)
+            {
+                r.GetPropertyBlock(_mpb);
+                _mpb.SetFloat("_DissolveAmount", t);
+                r.SetPropertyBlock(_mpb);
+            }
 
             yield return null;
         }
+
+        if(vfx.Length > 0)
+        {
+            for(int i = 0; i < vfx.Length; i++)
+            {
+                vfx[i].Stop();
+            }
+        }
+
+        yield return new WaitForSeconds(0.5f);
 
         Destroy(gameObject);
     }
@@ -132,11 +150,6 @@ public class Projectile : MonoBehaviour
     public void SetRange(float rng)
     {
         range = baseRange + (rng * 10);
-    }
-
-    public void SetScale(float scale)
-    {
-        transform.localScale = new Vector3(scale, scale, scale);
     }
 
     public void SetAbilityIndex(int i)

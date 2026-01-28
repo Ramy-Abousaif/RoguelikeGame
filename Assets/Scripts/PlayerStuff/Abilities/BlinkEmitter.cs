@@ -23,6 +23,7 @@ public class BlinkEmitter : AbilityEmitter
     private int enemyMask;
 
     [Header("Dash VFX")]
+    [SerializeField] private ParticleSystem dashParticles;
     [SerializeField] private Volume dashVolume;
     [SerializeField] private float dashVolumeInSpeed = 12f;
     [SerializeField] private float dashVolumeOutSpeed = 8f;
@@ -58,6 +59,7 @@ public class BlinkEmitter : AbilityEmitter
     private IEnumerator DashRoutine()
     {
         isDashing = true;
+        dashParticles.Play();
         hasExtendedDash = false;
         remainingDashDistance = dashDistance;
         Physics.IgnoreLayerCollision(playerMask, enemyMask, true);
@@ -117,6 +119,7 @@ public class BlinkEmitter : AbilityEmitter
 
         Physics.IgnoreLayerCollision(playerMask, enemyMask, false);
         isDashing = false;
+        dashParticles.Stop();
     }
 
     private void CheckDashHits()

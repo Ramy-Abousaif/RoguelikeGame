@@ -292,6 +292,10 @@ public class Abilities : MonoBehaviour
     public void OnHit(Enemy enemy, int abilityIndex, bool direct = false)
     {
         enemy.TakeDamage(_currentForm.abilities[abilityIndex].currentAbilityDamage, direct);
+        if(direct)
+        {
+            UIManager.Instance.ShowHitmarker();
+        }
     }
 
     // Update is called once per frame

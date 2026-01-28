@@ -30,7 +30,6 @@ public class ProjectileEmitter : AbilityEmitter
             projectile.SetPlayer(player);
             projectile.SetAbilityIndex(abilityIndex);
             projectile.SetRange(ability.currentAbilityRange * baseRange);
-            projectile.SetScale(ability.currentAbilityRange);
         }
     }
 }

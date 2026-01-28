@@ -209,6 +209,7 @@ public class PhysicsBasedCharacterController : Character
     protected override void Update()
     {
         base.Update();
+        UIManager.Instance.UpdateHealth(currentHealth, maxHealth);
         float targetForward = Vector3.Dot(transform.forward, _m_GoalVel) / _currentMaxSpeed;
         targetForward = Mathf.Clamp(targetForward, -1f, 1f);
         _currentForwardSpeed = Mathf.SmoothDamp(_currentForwardSpeed, targetForward, ref _forwardSpeedVelocity, _forwardSpeedSmoothTime);
