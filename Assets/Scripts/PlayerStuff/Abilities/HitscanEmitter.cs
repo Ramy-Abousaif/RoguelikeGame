@@ -161,8 +161,8 @@ public class HitscanEmitter : AbilityEmitter
         if (Physics.Raycast(ray, out RaycastHit hit, range, hitMask))
         {
             cam.GetComponent<CameraShake>().ShakeCamera(2, 1, 0.3f);
-            Instantiate(impactFX, hit.point, Quaternion.LookRotation(hit.normal));
-            if (hit.collider.TryGetComponent(out Enemy enemy))
+            PoolManager.Instance.Spawn(impactFX, hit.point, Quaternion.LookRotation(hit.normal));
+            if (hit.collider.transform.root.TryGetComponent(out Enemy enemy))
             {
                 player.abilities.OnHit(enemy, abilityIndex, true);
                 player.CallItemOnHit(enemy);

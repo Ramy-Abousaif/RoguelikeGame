@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8683499095431454337}
   - component: {fileID: 8683499095431454338}
-  - component: {fileID: 850563255021414184}
+  - component: {fileID: 6000750827574261616}
   m_Layer: 0
   m_Name: ImpactDecal
   m_TagString: Untagged
@@ -61,7 +61,7 @@ MonoBehaviour:
   m_FadeFactor: 1
   version: 1
   m_DecalLayerMask: 1
---- !u!114 &850563255021414184
+--- !u!114 &6000750827574261616
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -70,9 +70,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8683499095431454339}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e7d79fa59a49fa42984aa396f3f7fb6, type: 3}
+  m_Script: {fileID: 11500000, guid: 67cf5959f8d28b14e958f46618dc44f4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AutoFadeDestroy
-  lifeTime: 4
-  fadeDuration: 3
-  fadeStyle: 1
+  m_EditorClassIdentifier: Assembly-CSharp::AutoDespawn
+  Pool:
+    prefab: {fileID: 0}
+    initialSize: 10
+    expandable: 1
+  lifetime: 4

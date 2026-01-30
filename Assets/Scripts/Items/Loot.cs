@@ -18,10 +18,9 @@ public class Loot : Interactable
     IEnumerator LootSequence(PhysicsBasedCharacterController player)
     {
         isOpened = true;
-        GameObject placeholderEffectInstance = Instantiate(placeholderEffect, transform.position, Quaternion.identity);
+        PoolManager.Instance.Spawn(placeholderEffect, transform.position, Quaternion.identity);
         yield return new WaitForSeconds(1f);
         Instantiate(possibleLootItems[Random.Range(0, possibleLootItems.Length)], transform.position + Vector3.up * 0.5f, Quaternion.identity);
-        Destroy(placeholderEffectInstance);
         Destroy(this.gameObject);
     }
 }

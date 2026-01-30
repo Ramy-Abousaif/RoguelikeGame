@@ -17,7 +17,6 @@ public class BlinkEmitter : AbilityEmitter
     private float remainingDashDistance;
 
     [Header("Damage")]
-    [SerializeField] private float hitRadius = 1.2f;
     [SerializeField] private LayerMask enemyLayer;
     private int playerMask;
     private int enemyMask;
@@ -27,6 +26,9 @@ public class BlinkEmitter : AbilityEmitter
     [SerializeField] private Volume dashVolume;
     [SerializeField] private float dashVolumeInSpeed = 12f;
     [SerializeField] private float dashVolumeOutSpeed = 8f;
+    private float _currentFresnelAmount;
+    private float _initialFresnelAmount = 6.68f;
+    private float _dashFresnelTargetAmount = 2.0f;
     private float dashVolumeWeight = 0f;
 
     private bool isDashing;
@@ -60,6 +62,7 @@ public class BlinkEmitter : AbilityEmitter
     {
         isDashing = true;
         dashParticles.Play();
+        StartCoroutine(DashFresnel(_dashFresnelTargetAmount));
         hasExtendedDash = false;
         remainingDashDistance = dashDistance;
         Physics.IgnoreLayerCollision(playerMask, enemyMask, true);
@@ -94,7 +97,26 @@ public class BlinkEmitter : AbilityEmitter
         }
 
         rb.linearVelocity = Vector3.zero;
+        StartCoroutine(DashFresnel(_initialFresnelAmount));
         EndDash();
+    }
+
+    IEnumerator DashFresnel(float targetAmount)
+    {
+        float elapsed = 0f;
+        float start = _currentFresnelAmount;
+        float target = targetAmount;
+
+        while (elapsed < (dashDuration / 2))
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / (dashDuration / 2);
+
+            _currentFresnelAmount = Mathf.Lerp(start, target, t);
+            player.abilities.SetFresnelAmount(_currentFresnelAmount);
+
+            yield return null;
+        }
     }
     
     public override void StopFire()
@@ -106,6 +128,7 @@ public class BlinkEmitter : AbilityEmitter
         }
 
         EndDash();
+        player.abilities.SetFresnelAmount(_initialFresnelAmount);
         player.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
         hitEnemies.Clear();
 
@@ -137,7 +160,7 @@ public class BlinkEmitter : AbilityEmitter
 
         foreach (var col in hits)
         {
-            if (!col.TryGetComponent(out Enemy enemy))
+            if (!col.transform.root.TryGetComponent(out Enemy enemy))
                 continue;
 
             if (hitEnemies.Contains(enemy))

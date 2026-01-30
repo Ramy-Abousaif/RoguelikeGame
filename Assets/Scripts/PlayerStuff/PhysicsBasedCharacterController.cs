@@ -176,8 +176,8 @@ public class PhysicsBasedCharacterController : Character
         if (IsStrafing)
         {
             Vector3 camFwd = Vector3.forward;
-            if (Camera.main != null)
-                camFwd = Camera.main.transform.forward;
+            if (cam != null)
+                camFwd = cam.transform.forward;
             camFwd.y = 0f;
             if (camFwd.sqrMagnitude < 0.0001f) return Vector3.forward;
             return camFwd.normalized;
@@ -347,14 +347,14 @@ public class PhysicsBasedCharacterController : Character
 
     private void FlyMove()
     {
-        if (Camera.main == null)
+        if (cam == null)
             return;
 
         // -------- INPUT --------
         Vector3 input = new Vector3(_moveContext.x, 0f, _moveContext.y);
 
-        Vector3 camForward = Camera.main.transform.forward;
-        Vector3 camRight = Camera.main.transform.right;
+        Vector3 camForward = cam.transform.forward;
+        Vector3 camRight = cam.transform.right;
 
         camForward.Normalize();
         camRight.Normalize();
@@ -436,9 +436,11 @@ public class PhysicsBasedCharacterController : Character
 
     protected override void OnDamageTaken(float damage, bool direct = false)
     {
-        // Optional: show UI feedback for player
-        // Flash();
-        // Debug.Log($"Player took {damage} damage");
+        // Optional: show other UI feedback
+        if(direct)
+        {
+            camShake.ShakeCamera(2f, 2f, 0.3f);
+        }
     }
 
     public void SetExtraJumps(int amount)
@@ -461,7 +463,7 @@ public class PhysicsBasedCharacterController : Character
         }
 
         Vector3 origin = transform.position + Vector3.up * 0.9f; // same as PerformInteract
-        Vector3 point = origin + Camera.main.transform.forward * interactRange;
+        Vector3 point = origin + cam.transform.forward * interactRange;
 
         Collider[] hits = Physics.OverlapSphere(point, interactRadius, interactLayerMask);
         HashSet<GameObject> hitObjects = new HashSet<GameObject>();
@@ -686,7 +688,7 @@ public class PhysicsBasedCharacterController : Character
     private void PerformInteract()
     {
         Vector3 origin = transform.position + Vector3.up * 0.9f; // approximate chest height
-        Vector3 point = origin + Camera.main.transform.forward * interactRange;
+        Vector3 point = origin + cam.transform.forward * interactRange;
 
         Collider[] hits = Physics.OverlapSphere(point, interactRadius, interactLayerMask);
         foreach (var hit in hits)
@@ -706,7 +708,7 @@ public class PhysicsBasedCharacterController : Character
     /// <returns>The camera corrected movement input.</returns>
     private Vector3 AdjustInputToFaceCamera(Vector3 moveInput)
     {
-        float facing = Camera.main.transform.eulerAngles.y;
+        float facing = cam.transform.eulerAngles.y;
         return (Quaternion.Euler(0, facing, 0) * moveInput);
     }
 

@@ -269,6 +269,15 @@ public class Abilities : MonoBehaviour
         }
     }
 
+    public void SetFresnelAmount(float value)
+    {
+        foreach (var mat in mats)
+        {
+            if (mat.HasProperty("_FresnelAmount"))
+                mat.SetFloat("_FresnelAmount", value);
+        }
+    }
+
     private void OnApplicationQuit()
     {
         SetFormAmount(0);

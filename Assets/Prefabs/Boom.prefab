@@ -136,7 +136,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1210030292047349378}
-  - component: {fileID: 5270187501603616892}
+  - component: {fileID: -664298178530167480}
   m_Layer: 9
   m_Name: Boom
   m_TagString: Untagged
@@ -163,7 +163,7 @@ Transform:
   - {fileID: 1781463328}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5270187501603616892
+--- !u!114 &-664298178530167480
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -172,10 +172,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1210030292047349381}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fdd07c7970ea0c45a228767cfc571fd, type: 3}
+  m_Script: {fileID: 11500000, guid: 67cf5959f8d28b14e958f46618dc44f4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DestroyObject
-  delay: 5
+  m_EditorClassIdentifier: Assembly-CSharp::AutoDespawn
+  Pool:
+    prefab: {fileID: 0}
+    initialSize: 10
+    expandable: 1
+  lifetime: 5
 --- !u!1 &1210030292539432417
 GameObject:
   m_ObjectHideFlags: 0

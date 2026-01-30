@@ -3,9 +3,13 @@ using System.Linq;
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using Unity.Mathematics;
 
 public abstract class Character : MonoBehaviour
 {
+    protected Camera cam;
+    protected CameraShake camShake;
+
     [Header("Health")]
     [SerializeField] protected float maxHealth = 100f;
     [SerializeField] protected float currentHealth;
@@ -15,13 +19,10 @@ public abstract class Character : MonoBehaviour
 
     [Header("Flash Settings")]
     [SerializeField] private float flashDuration = 0.1f;
-    [SerializeField] private float flashIntensity = 2f;
 
     private Renderer[] renderers;
-    private MaterialPropertyBlock mpb;
     private Coroutine flashCoroutine;
 
-    private static readonly int FlashColorID  = Shader.PropertyToID("_FlashColor");
     private static readonly int FlashAmountID = Shader.PropertyToID("_FlashAmount");
 
     [Header("Effects")]
@@ -31,6 +32,8 @@ public abstract class Character : MonoBehaviour
 
     protected virtual void Awake()
     {
+        cam = Camera.main;
+        camShake = cam.GetComponent<CameraShake>();
         currentHealth = maxHealth;
         renderers = GetComponentsInChildren<Renderer>(true);
     }
@@ -157,6 +160,20 @@ public abstract class Character : MonoBehaviour
         currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
     }
 
+    public virtual void ShowCustomText(string str, Color color)
+    {
+        if (numberEffect != null)
+        {
+            GameObject textObj = PoolManager.Instance.Spawn(numberEffect, transform.position, Quaternion.identity);
+            var text = textObj.GetComponentInChildren<TextMeshPro>();
+            if (text != null)
+            {
+                text.color = color;
+                text.text = str;
+            }
+        }
+    }
+
     protected virtual void onHeal(float amount)
     {
         // Optional: override to show heal numbers, effects, sound, etc.
@@ -184,7 +201,7 @@ public abstract class Character : MonoBehaviour
     {
         if (numberEffect != null)
         {
-            GameObject dmgNumber = Instantiate(numberEffect, transform.position, Quaternion.identity);
+            GameObject dmgNumber = PoolManager.Instance.Spawn(numberEffect, transform.position, Quaternion.identity);
             var text = dmgNumber.GetComponentInChildren<TextMeshPro>();
             if (text != null)
             {

@@ -14,7 +14,7 @@ public class ItemPickup: Interactable
     public override void OnInteract(PhysicsBasedCharacterController player)
     {
         PhysicsBasedCharacterController p = player.GetComponent<PhysicsBasedCharacterController>();
-        Additem(p);
+        AddItem(p);
         // Call OnPickup only for the item that was just added/updated,
         // instead of calling all items' OnPickup (which would re-apply other items).
         foreach (ItemList il in p.items)
@@ -28,7 +28,7 @@ public class ItemPickup: Interactable
         Destroy(this.gameObject);
     }
 
-    public void Additem(PhysicsBasedCharacterController player)
+    public void AddItem(PhysicsBasedCharacterController player)
     {
         foreach(ItemList i in player.items)
         {

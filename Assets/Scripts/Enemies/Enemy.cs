@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Enemy : Character
@@ -16,14 +17,19 @@ public class Enemy : Character
         // Sound
         if(direct)
         {
-            Camera.main.GetComponent<CameraShake>().ShakeCamera(2f, 2f, 0.3f);
+            camShake.ShakeCamera(2f, 2f, 0.3f);
         }
+    }
+
+    protected override void onHeal(float amount)
+    {
+        ShowNumber(amount);
     }
 
     protected override void Die()
     {
         currentHealth = 0f;
-        Instantiate(deathEffect, transform.position, Quaternion.identity);
+        PoolManager.Instance.Spawn(deathEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 }

@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 2206862001648216015}
   - component: {fileID: 8346329150868277834}
   - component: {fileID: 5407578234232563633}
-  - component: {fileID: 7907062618323844771}
   - component: {fileID: -3986808445816445668}
+  - component: {fileID: 7821626356479357916}
   m_Layer: 8
   m_Name: Plush
   m_TagString: Untagged
@@ -119,28 +119,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!64 &7907062618323844771
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4262637840000889668}
-  m_Material: {fileID: 13400000, guid: 34434eea1269926419c3b29a4090e6a7, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 1611563260197435729, guid: afdbb89a84429934c89cd90a5fdecb04, type: 3}
 --- !u!114 &-3986808445816445668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,3 +136,26 @@ MonoBehaviour:
     m_Bits: 4294967295
   explosionFX: {fileID: 8226681193282385452, guid: 7054ff0db2a99594fb5a9b71c4566adc, type: 3}
   timer: 2
+--- !u!136 &7821626356479357916
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4262637840000889668}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.07336279
+  m_Height: 0.22551295
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

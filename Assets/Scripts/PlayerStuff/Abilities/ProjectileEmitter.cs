@@ -1,19 +1,17 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ProjectileEmitter : AbilityEmitter
 {
     [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private LayerMask enemyMask;
     [SerializeField] private float baseLaunchForce = 25f;
     [SerializeField] private float baseRange = 10f;
     [SerializeField] private float spin = 20f;
     
     protected override void PerformFire(Abilities.Ability ability)
     {
-        GameObject proj = Instantiate(
-            projectilePrefab,
-            firePoint.position,
-            firePoint.rotation
-        );
+        GameObject proj = PoolManager.Instance.Spawn(projectilePrefab, firePoint.position, firePoint.rotation);
 
         if (!proj.TryGetComponent(out Rigidbody rb)) return;
 
@@ -27,7 +25,9 @@ public class ProjectileEmitter : AbilityEmitter
 
         if (proj.TryGetComponent(out Projectile projectile))
         {
-            projectile.SetPlayer(player);
+            projectile.SetOwner(player);
+            //projectile.SetHitMask(enemyMask);
+            projectile.SetDamage(ability.currentAbilityDamage);
             projectile.SetAbilityIndex(abilityIndex);
             projectile.SetRange(ability.currentAbilityRange * baseRange);
         }

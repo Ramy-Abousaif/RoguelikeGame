@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Explode : MonoBehaviour
 {
-    private bool onGround = false;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private GameObject explosionFX;
     private float ticker = 0f;
@@ -23,8 +22,8 @@ public class Explode : MonoBehaviour
             ticker += Time.deltaTime;
             if(ticker >= timer)
             {
-                Instantiate(explosionFX, transform.position, quaternion.identity);
-                Destroy(gameObject);
+                PoolManager.Instance.Spawn(explosionFX, transform.position, Quaternion.identity);
+                PoolManager.Instance.Despawn(gameObject);
             }
         }
     }

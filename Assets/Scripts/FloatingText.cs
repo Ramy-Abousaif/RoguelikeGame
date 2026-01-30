@@ -10,6 +10,10 @@ public class FloatingText : MonoBehaviour
     void Start()
     {
         cam = Camera.main.transform;
+    }
+
+    void OnEnable()
+    {
         transform.localPosition += offset;
         transform.localPosition += new Vector3(
             Random.Range(-randomizeIntensity.x, randomizeIntensity.x),

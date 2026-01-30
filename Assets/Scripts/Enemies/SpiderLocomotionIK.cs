@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SpiderController : MonoBehaviour
+public class SpiderLocomotionIK : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Transform bodyPivot;
@@ -12,77 +12,19 @@ public class SpiderController : MonoBehaviour
     [Header("Body Settings")]
     [SerializeField] private float bodyHeightOffset = 1.4f;
     [SerializeField] private float bodyPositionSpring = 25f;
-    [SerializeField] private float bodyPositionDamping = 6f;
     [SerializeField] private float bodyRotationSpring = 20f;
-    [SerializeField] private float bodyRotationDamping = 5f;
 
-    [Header("Movement")]
-    [SerializeField] private float moveSpeed = 6f;
-    [SerializeField] private float rotationSpeed = 180f;
-
-    [Header("AI Wander")]
-    [SerializeField] private float wanderInterval = 2f;
-    [SerializeField] private float obstacleCheckDistance = 1.2f;
-    [SerializeField] private LayerMask obstacleMask = ~0;
-
-    private Vector3 moveDirection;
-    private float wanderTimer;
 
     // Second-order dynamics state
     private Vector3 bodyPosVelocity;
     private Vector3 bodyUpVelocity;
     private Vector3 smoothedUp = Vector3.up;
 
-    private void Start()
-    {
-        wanderTimer = Random.Range(0f, wanderInterval);
-        PickNewDirection();
-    }
 
     private void Update()
     {
-        UpdateMovement();
         UpdateBodyPosition();
         UpdateBodyRotation();
-    }
-
-    // ---------------- MOVEMENT ----------------
-
-    private void UpdateMovement()
-    {
-        wanderTimer -= Time.deltaTime;
-        if (wanderTimer <= 0f)
-        {
-            wanderTimer = wanderInterval;
-            PickNewDirection();
-        }
-
-        // Obstacle avoidance
-        if (Physics.Raycast(transform.position + Vector3.up * 0.5f,
-            -transform.forward, obstacleCheckDistance, obstacleMask))
-        {
-            PickNewDirection();
-        }
-
-        // Rotate
-        if (moveDirection.sqrMagnitude > 0.001f)
-        {
-            Quaternion targetRot = Quaternion.LookRotation(moveDirection, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(
-                transform.rotation,
-                targetRot,
-                rotationSpeed * Time.deltaTime
-            );
-        }
-
-        // Move
-        transform.position += -transform.forward * moveSpeed * Time.deltaTime;
-    }
-
-    private void PickNewDirection()
-    {
-        Vector2 rnd = Random.insideUnitCircle.normalized;
-        moveDirection = new Vector3(rnd.x, 0f, rnd.y);
     }
 
     // ---------------- BODY POSITION ----------------
@@ -129,7 +71,7 @@ public class SpiderController : MonoBehaviour
         );
 
         Quaternion targetRotation =
-            Quaternion.LookRotation(transform.forward, smoothedUp);
+            Quaternion.LookRotation(-transform.forward, smoothedUp);
 
         bodyPivot.rotation = Quaternion.Slerp(
             bodyPivot.rotation,

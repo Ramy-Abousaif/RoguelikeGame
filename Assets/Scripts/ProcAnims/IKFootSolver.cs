@@ -50,7 +50,7 @@ public class IKFootSolver : MonoBehaviour
                 newNormal = info.normal;
                 if(impact != null)
                 {
-                    GameObject impactFX = Instantiate(impact, newPosition, Quaternion.Euler(newNormal));                    
+                    PoolManager.Instance.Spawn(impact, newPosition, Quaternion.Euler(newNormal));
                 }
                 if(impactDecal != null)
                 {
@@ -66,7 +66,7 @@ public class IKFootSolver : MonoBehaviour
                         ParticleSystem.MainModule ps = impact.GetComponent<ParticleSystem>().main;
                         ps.startColor = pixelColor;
                     }
-                    GameObject impactDecalGO = Instantiate(impactDecal, newPosition + (newNormal.normalized * 0.1f), Quaternion.LookRotation(-newNormal));   
+                    PoolManager.Instance.Spawn(impactDecal,newPosition + (newNormal.normalized * 0.1f), Quaternion.LookRotation(-newNormal));
                 }
             }
         }

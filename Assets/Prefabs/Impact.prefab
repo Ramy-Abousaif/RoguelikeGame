@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1653079456226441404}
   - component: {fileID: 6370981913780834893}
   - component: {fileID: 2369191941113747900}
+  - component: {fileID: 454398374383614157}
   m_Layer: 9
   m_Name: Impact
   m_TagString: Untagged
@@ -43,7 +44,7 @@ ParticleSystem:
   serializedVersion: 8
   lengthInSec: 2.5
   simulationSpeed: 2
-  stopAction: 2
+  stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -4903,3 +4904,20 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &454398374383614157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7160406523292265567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67cf5959f8d28b14e958f46618dc44f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoDespawn
+  Pool:
+    prefab: {fileID: 0}
+    initialSize: 10
+    expandable: 1
+  lifetime: 2.5

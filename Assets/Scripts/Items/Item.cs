@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 [System.Serializable]
 public abstract class Item
@@ -106,7 +105,8 @@ public class HealingAreaItem: Item
         {
             if(effect == null) 
                 effect = (GameObject)Resources.Load("Item Effects/HealingArea", typeof(GameObject));
-            GameObject healingArea = GameObject.Instantiate(effect, player.transform.position, Quaternion.Euler(Vector3.zero));
+            
+            PoolManager.Instance.Spawn(effect, player.transform.position, Quaternion.Euler(Vector3.zero));
             internalCooldown = 10;
         }
     }
