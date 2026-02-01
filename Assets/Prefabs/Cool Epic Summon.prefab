@@ -187,7 +187,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8833247794352046060}
-  - component: {fileID: 3086757850771373806}
   m_Layer: 8
   m_Name: Renderers
   m_TagString: Untagged
@@ -218,27 +217,6 @@ Transform:
   - {fileID: 1234659064480812624}
   m_Father: {fileID: 6795202386694593707}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &3086757850771373806
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2382710660861194373}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 3, y: 4, z: 1}
-  m_Center: {x: 0, y: -1, z: 0}
 --- !u!1 &4029737080156553955
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,6 +493,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6795202386694593707}
+  - component: {fileID: 8452066584599372569}
+  - component: {fileID: 8603083906854599112}
+  - component: {fileID: 8727592888943762113}
+  - component: {fileID: 2958455421973525170}
   m_Layer: 8
   m_Name: Cool Epic Summon
   m_TagString: Untagged
@@ -538,6 +520,108 @@ Transform:
   - {fileID: 8833247794352046060}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &8452066584599372569
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5720607538058651576}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 4, z: 1}
+  m_Center: {x: 0, y: -1, z: 0}
+--- !u!114 &8603083906854599112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5720607538058651576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc7632f2c171e4e4a855a201e6d4ab3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SummonAllyAI
+  selfCharacter: {fileID: 0}
+  target: {fileID: 0}
+  agent: {fileID: 0}
+  anim: {fileID: 0}
+  chaseRange: 30
+  attackRange: 2.2
+  losOrigin: {fileID: 0}
+  losBlockMask:
+    serializedVersion: 2
+    m_Bits: 0
+  losMaxDistance: 50
+  windupTime: 0.3
+  attackCooldown: 1.2
+  faceTargetSpeed: 12
+  owner: {fileID: 0}
+  allyComponent: {fileID: 0}
+  lifetime: 10
+--- !u!114 &8727592888943762113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5720607538058651576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f99a8af42e05b7a4b932aff282f0c068, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Ally
+  maxHealth: 100
+  currentHealth: 0
+  armor: 0
+  flashDuration: 0.1
+  numberEffect: {fileID: 7261022963547120728, guid: fbc70f98fa1af54458ba354c76d5815b, type: 3}
+  deathEffect: {fileID: 1210030292047349381, guid: 43a29de6fa71e204cbfa68082d92a2d1, type: 3}
+  _renderers:
+  - {fileID: 82819726416527845}
+  - {fileID: 5635899636044096700}
+  - {fileID: 1412112247077706709}
+  - {fileID: 7492602370056102287}
+  - {fileID: 6261167300889987615}
+  - {fileID: 3028885645705205195}
+  - {fileID: 3956348807633654189}
+  - {fileID: 5629175859590685891}
+  dissolveable: 1
+  dissolveDelay: 1
+  dissolveDuration: 0.4
+--- !u!195 &2958455421973525170
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5720607538058651576}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 2
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 4
+  m_BaseOffset: 3
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &6343518690290683474
 GameObject:
   m_ObjectHideFlags: 0

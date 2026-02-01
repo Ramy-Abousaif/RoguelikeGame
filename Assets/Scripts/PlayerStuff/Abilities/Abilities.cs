@@ -11,6 +11,7 @@ public enum AbilityType
     PROJECTILE,
     HITSCAN,
     BLINK,
+    SUMMON,
     BLANK
 }
 
@@ -430,7 +431,8 @@ public class Abilities : MonoBehaviour
         }
 
         if ((a.abilityEmitter.supportedType == AbilityType.TRANSFORM ||
-            a.abilityEmitter.supportedType == AbilityType.BLINK) &&
+            a.abilityEmitter.supportedType == AbilityType.BLINK ||
+            a.abilityEmitter.supportedType == AbilityType.SUMMON) &&
             !_isAttacking)
         {
             if (a.cooldownTimer > 0f)
