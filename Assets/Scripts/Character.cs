@@ -27,6 +27,7 @@ public abstract class Character : MonoBehaviour
 
     [Header("Effects")]
     [SerializeField] protected GameObject numberEffect;
+    [SerializeField] protected GameObject stunEffect;
 
     protected Dictionary<System.Type, StatusEffect> activeEffects = new();
 
@@ -44,6 +45,14 @@ public abstract class Character : MonoBehaviour
             StopCoroutine(flashCoroutine);
 
         flashCoroutine = StartCoroutine(FlashRoutine());
+    }
+
+    public void ShowStunEffect(bool show)
+    {
+        if (stunEffect != null)
+        {
+            stunEffect.SetActive(show);
+        }
     }
 
     private IEnumerator FlashRoutine()

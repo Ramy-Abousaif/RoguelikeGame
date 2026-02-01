@@ -31,6 +31,8 @@ MonoBehaviour:
     baseAbilityDamage: 10
     currentAbilityDamage: 10
     affectedByAttackSpeed: 1
+    stunnable: 0
+    stunDuration: 0
     cooldownTimer: 0
     clip: {fileID: 7400000, guid: 0c9c1b5af45660b4b847909d66f7abe8, type: 2}
     isPlaying: 0
@@ -50,6 +52,8 @@ MonoBehaviour:
     baseAbilityDamage: 50
     currentAbilityDamage: 50
     affectedByAttackSpeed: 0
+    stunnable: 1
+    stunDuration: 2
     cooldownTimer: 0
     clip: {fileID: 7400000, guid: 1b45ecd8fefd2e0499ac495d04299860, type: 2}
     isPlaying: 0
@@ -69,6 +73,8 @@ MonoBehaviour:
     baseAbilityDamage: 40
     currentAbilityDamage: 40
     affectedByAttackSpeed: 0
+    stunnable: 0
+    stunDuration: 0
     cooldownTimer: 0
     clip: {fileID: 7400000, guid: 83afbb8aad3cbcc41b5ff19112b69806, type: 2}
     isPlaying: 0
@@ -88,7 +94,9 @@ MonoBehaviour:
     baseAbilityDamage: 0
     currentAbilityDamage: 0
     affectedByAttackSpeed: 0
-    cooldownTimer: 0
+    stunnable: 0
+    stunDuration: 0
+    cooldownTimer: 40
     clip: {fileID: 0}
     isPlaying: 0
     playTimer: 0

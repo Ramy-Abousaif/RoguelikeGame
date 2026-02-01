@@ -12,8 +12,9 @@ public class SummonEmitter : AbilityEmitter
     [SerializeField] private float summonDuration = 10f;
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private bool replaceOldest = true;
+    [SerializeField] private bool onGround = true;
 
-    private readonly System.Collections.Generic.List<SummonAllyAI> activeSummons = new();
+    private readonly System.Collections.Generic.List<Ally> activeSummons = new();
 
     protected override void PerformFire(Abilities.Ability ability)
     {
@@ -40,7 +41,7 @@ public class SummonEmitter : AbilityEmitter
                 {
                     if (activeSummons[0] != null)
                     {
-                        activeSummons[0].allyComponent.Fade(false);
+                        activeSummons[0].Fade(false);
                     }
 
                     activeSummons.RemoveAt(0);
@@ -58,7 +59,7 @@ public class SummonEmitter : AbilityEmitter
 
             GameObject obj = PoolManager.Instance.Spawn(summonPrefab, spawnPos, spawnRot);
 
-            if (obj.TryGetComponent(out SummonAllyAI ally))
+            if (obj.TryGetComponent(out Ally ally))
             {
                 ally.Initialize(summonDuration);
                 activeSummons.Add(ally);
@@ -88,6 +89,15 @@ public class SummonEmitter : AbilityEmitter
         forward.Normalize();
 
         Vector3 desired = player.transform.position + forward * spawnDistance;
+
+        // desired on ground
+        if (onGround)
+        {
+            if (Physics.Raycast(desired, Vector3.down, out RaycastHit groundHit, Mathf.Infinity, groundMask))
+            {
+                desired.y = groundHit.point.y;
+            }
+        }
 
         // randomize slightly so it doesn't always stack on same spot
         Vector2 rnd = Random.insideUnitCircle * spawnRadius;

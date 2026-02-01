@@ -50,8 +50,9 @@ public class Abilities : MonoBehaviour
 
         public float baseAbilityDamage = 10f;
         public float currentAbilityDamage = 1f;
-
         public bool affectedByAttackSpeed = false;
+        public bool stunnable = false;
+        public float stunDuration = 0f;
 
         [HideInInspector] public float cooldownTimer = 0f;
         [HideInInspector] public AnimationClip clip = null;
@@ -302,6 +303,10 @@ public class Abilities : MonoBehaviour
     public void OnHit(Enemy enemy, int abilityIndex, bool direct = false)
     {
         enemy.TakeDamage(_currentForm.abilities[abilityIndex].currentAbilityDamage, direct);
+        if (_currentForm.abilities[abilityIndex].stunnable)
+        {
+            enemy.GetComponent<AIBase>()?.StartStun(_currentForm.abilities[abilityIndex].stunDuration);
+        }
         if(direct)
         {
             UIManager.Instance.ShowHitmarker();

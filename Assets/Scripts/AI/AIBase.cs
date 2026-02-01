@@ -2,7 +2,14 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class AIBase : MonoBehaviour
+public enum Faction
+{
+    Player,
+    Enemy,
+    Ally
+}
+
+public class AIBase : MonoBehaviour
 {
     public enum State { Chase, Windup, Attack, Stunned }
 
@@ -22,16 +29,21 @@ public abstract class AIBase : MonoBehaviour
     [SerializeField] protected LayerMask losBlockMask;
     [SerializeField] protected float losMaxDistance = 50f;
 
-    [Header("Attack Timing")]
+    [Header("Attack Settings")]
+    [SerializeField] protected Faction faction = Faction.Player;
     [SerializeField] protected float windupTime = 0.3f;
-    [SerializeField] protected float attackCooldown = 1.2f;
+    protected AIAttack[] attacks;
+    private Coroutine windupRoutine;
+    private Coroutine stunRoutine;
 
     [Header("Rotation")]
     [SerializeField] protected float faceTargetSpeed = 12f;
 
     protected State state;
-    protected float attackTimer;
-    protected bool canAttack => attackTimer <= 0f;
+    public Transform Target => target;
+    public Animator Anim => anim;
+    public Character SelfCharacter => selfCharacter;
+    public float AttackRange => attackRange;
 
     protected virtual void Awake()
     {
@@ -43,13 +55,26 @@ public abstract class AIBase : MonoBehaviour
 
         if (target == null)
         {
-            var p = GameObject.FindGameObjectWithTag("Player");
+            GameObject p = null;
+            switch (faction)
+            {
+                case Faction.Enemy:
+                    p = GameObject.FindWithTag("Enemy");
+                    break;
+                case Faction.Player:
+                    p = GameObject.FindWithTag("Player");
+                    break;
+                default:
+                    p = null;
+                    break;
+            }
             if (p != null)
             {
                 target = p.transform;
                 targetCharacter = p.GetComponent<Character>();
             }
         }
+        attacks = GetComponents<AIAttack>();
     }
 
     public static Vector3 GetLeadDirection(Vector3 shooterPos, Vector3 targetPos, Vector3 targetVelocity, float projectileSpeed)
@@ -86,11 +111,38 @@ public abstract class AIBase : MonoBehaviour
         return (aimPoint - shooterPos).normalized;
     }
 
+    public bool TryGetTargetVelocity(out Vector3 vel)
+    {
+        vel = Vector3.zero;
+
+        if (targetCharacter == null) return false;
+
+        if (targetCharacter.TryGetComponent(out Rigidbody rb))
+        {
+            vel = rb.linearVelocity;
+            return true;
+        }
+
+        if (targetCharacter.TryGetComponent(out NavMeshAgent agent))
+        {
+            vel = agent.velocity;
+            return true;
+        }
+
+        return false;
+    }
+
     protected virtual void Update()
     {
         if (target == null) return;
 
-        attackTimer -= Time.deltaTime;
+        if (attacks != null)
+        {
+            float dt = Time.deltaTime;
+            for (int i = 0; i < attacks.Length; i++)
+                if (attacks[i] != null)
+                    attacks[i].Tick(dt);
+        }
 
         if (state == State.Stunned)
             return;
@@ -108,14 +160,26 @@ public abstract class AIBase : MonoBehaviour
         bool inAttackRange = dist <= attackRange;
         bool hasLOS = HasLineOfSight();
 
-        if (inAttackRange && hasLOS && canAttack && state != State.Windup)
+        if (inAttackRange && hasLOS && HasAnyReadyAttack() && state != State.Windup)
         {
-            StartCoroutine(WindupRoutine());
+            StartWindup();
             return;
         }
 
         if (state != State.Windup)
             UpdateChase();
+    }
+
+    protected virtual void StartWindup()
+    {
+        if (windupRoutine != null) return;
+        windupRoutine = StartCoroutine(WindupRoutine());
+    }
+
+    public virtual void StartStun(float duration)
+    {
+        if (stunRoutine != null) return;
+        stunRoutine = StartCoroutine(StunRoutine(duration));
     }
 
     protected virtual void UpdateChase()
@@ -126,6 +190,15 @@ public abstract class AIBase : MonoBehaviour
 
         if (anim)
             anim.SetBool("Moving", agent.velocity.sqrMagnitude > 0.1f);
+    }
+
+    protected bool HasAnyReadyAttack()
+    {
+        if (attacks == null) return false;
+        for (int i = 0; i < attacks.Length; i++)
+            if (attacks[i] != null && attacks[i].CanUse(this))
+                return true;
+        return false;
     }
 
     protected virtual IEnumerator WindupRoutine()
@@ -142,21 +215,39 @@ public abstract class AIBase : MonoBehaviour
         float t = 0f;
         while (t < windupTime)
         {
+            if (state == State.Stunned) // safety bail
+                yield break;
+
             t += Time.deltaTime;
             FaceTarget();
             yield return null;
         }
 
-        // Recheck LOS/range before committing
+        // re-check before attacking
         float dist = Vector3.Distance(transform.position, target.position);
         if (dist <= attackRange && HasLineOfSight())
         {
             state = State.Attack;
-            DoAttack();
-            attackTimer = attackCooldown;
+            TryAttack();
         }
 
+        // end windup
         state = State.Chase;
+        windupRoutine = null;
+    }
+
+    protected virtual void TryAttack()
+    {
+        if (attacks == null || attacks.Length == 0) return;
+
+        for (int i = 0; i < attacks.Length; i++)
+        {
+            if (attacks[i] == null) continue;
+            if (!attacks[i].CanUse(this)) continue;
+
+            attacks[i].Execute(this);
+            return;
+        }
     }
 
     protected virtual bool HasLineOfSight()
@@ -186,15 +277,10 @@ public abstract class AIBase : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
     }
 
-    public virtual void ApplyStun(float duration)
-    {
-        if (gameObject.activeInHierarchy)
-            StartCoroutine(StunRoutine(duration));
-    }
-
     private IEnumerator StunRoutine(float duration)
     {
         state = State.Stunned;
+        selfCharacter.ShowStunEffect(true);
         agent.isStopped = true;
 
         if (anim)
@@ -206,7 +292,7 @@ public abstract class AIBase : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         state = State.Chase;
+        selfCharacter.ShowStunEffect(false);
+        stunRoutine = null;
     }
-
-    protected abstract void DoAttack();
 }

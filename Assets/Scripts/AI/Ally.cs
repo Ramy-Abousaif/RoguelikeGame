@@ -15,11 +15,32 @@ public class Ally : Character
     [SerializeField] private float dissolveDuration = 0.4f;
     private Coroutine dissolveRoutine;
 
+    private float lifetime = 10f;
+    private float timer;
+    private bool isDestroyed = false;
+
     protected override void Awake()
     {
         base.Awake();
         _mpb = new MaterialPropertyBlock();
         Fade(true);
+    }
+
+    public void Initialize(float summonDuration)
+    {
+        lifetime = summonDuration;
+        timer = 0f;
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        timer += Time.deltaTime;
+        if (timer >= lifetime && !isDestroyed)
+        {
+            isDestroyed = true;
+            Fade(false);
+        }
     }
 
     protected override void OnDamageTaken(float damage, bool direct = false)
