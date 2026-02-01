@@ -60,7 +60,7 @@ MonoBehaviour:
   stickable: 0
   rotXOffset: 0
   rotZOffset: 0
-  impactFX: {fileID: 0}
+  impactFX: {fileID: 9113980464775257051, guid: b9717ca208437cb41a44a153de3f14f7, type: 3}
   ongoingEffect: {fileID: 0}
   dissolveable: 0
   dissolveDelay: 1
