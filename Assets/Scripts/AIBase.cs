@@ -2,13 +2,14 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class EnemyAIBase : MonoBehaviour
+public abstract class AIBase : MonoBehaviour
 {
     public enum State { Chase, Windup, Attack, Stunned }
 
     [Header("References")]
     [SerializeField] protected Character selfCharacter;
     [SerializeField] protected Transform target;
+    [HideInInspector] protected Character targetCharacter;
     [SerializeField] protected NavMeshAgent agent;
     [SerializeField] protected Animator anim;
 
@@ -43,8 +44,46 @@ public abstract class EnemyAIBase : MonoBehaviour
         if (target == null)
         {
             var p = GameObject.FindGameObjectWithTag("Player");
-            if (p != null) target = p.transform;
+            if (p != null)
+            {
+                target = p.transform;
+                targetCharacter = p.GetComponent<Character>();
+            }
         }
+    }
+
+    public static Vector3 GetLeadDirection(Vector3 shooterPos, Vector3 targetPos, Vector3 targetVelocity, float projectileSpeed)
+    {
+        Vector3 toTarget = targetPos - shooterPos;
+
+        float a = Vector3.Dot(targetVelocity, targetVelocity) - projectileSpeed * projectileSpeed;
+        float b = 2f * Vector3.Dot(targetVelocity, toTarget);
+        float c = Vector3.Dot(toTarget, toTarget);
+
+        // If a is ~0 then speeds are similar; avoid divide by zero
+        if (Mathf.Abs(a) < 0.0001f)
+            return toTarget.normalized;
+
+        float discriminant = b * b - 4f * a * c;
+
+        // No real solution => can't intercept, just shoot at current position
+        if (discriminant < 0f)
+            return toTarget.normalized;
+
+        float sqrt = Mathf.Sqrt(discriminant);
+
+        // Two possible times
+        float t1 = (-b - sqrt) / (2f * a);
+        float t2 = (-b + sqrt) / (2f * a);
+
+        // pick the smallest positive time
+        float t = Mathf.Min(t1, t2);
+        if (t < 0f) t = Mathf.Max(t1, t2);
+        if (t < 0f) return toTarget.normalized;
+
+        Vector3 aimPoint = targetPos + targetVelocity * t;
+        Debug.DrawRay(shooterPos, aimPoint - shooterPos, Color.green);
+        return (aimPoint - shooterPos).normalized;
     }
 
     protected virtual void Update()

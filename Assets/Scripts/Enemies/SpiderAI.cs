@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SpiderAI : EnemyAIBase
+public class SpiderAI : AIBase
 {
     [Header("Projectile Attack")]
     [SerializeField] private GameObject projectilePrefab;
@@ -9,6 +9,11 @@ public class SpiderAI : EnemyAIBase
     [SerializeField] private float projectileDamage = 10f;
     [SerializeField] private LayerMask projectileHitMask;
 
+    [Header("Leading")]
+    [SerializeField] private bool useLeading = true;
+    [SerializeField] private float maxLeadTime = 1.5f;
+    [SerializeField] private float aimHeightOffset = 1.0f;
+
     protected override void Awake()
     {
         base.Awake();
@@ -16,13 +21,34 @@ public class SpiderAI : EnemyAIBase
 
     protected override void DoAttack()
     {
-        if (anim)
-            anim.SetTrigger("Attack");
-
-        if (projectilePrefab == null || shootPoint == null)
+        if (projectilePrefab == null || shootPoint == null || target == null)
             return;
 
-        GameObject obj = PoolManager.Instance.Spawn(projectilePrefab, shootPoint.position, shootPoint.rotation);
+        Vector3 shooterPos = shootPoint.position;
+        Vector3 targetPos = target.position + Vector3.up * aimHeightOffset;
+
+        Vector3 targetVel = Vector3.zero;
+        Rigidbody targetRigidbody = targetCharacter.GetComponent<Rigidbody>();
+        targetVel = targetRigidbody.linearVelocity;
+
+        Vector3 dir;
+
+        if (useLeading)
+        {
+            dir = GetLeadDirection(shooterPos, targetPos, targetVel, projectileSpeed);
+
+            float leadMagnitude = targetVel.magnitude * maxLeadTime;
+            Vector3 clampedAimPoint = targetPos + Vector3.ClampMagnitude(targetVel, leadMagnitude) * maxLeadTime;
+            dir = (clampedAimPoint - shooterPos).normalized;
+        }
+        else
+        {
+            dir = (targetPos - shooterPos).normalized;
+        }
+
+        Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+
+        GameObject obj = PoolManager.Instance.Spawn(projectilePrefab, shooterPos, rot);
 
         if (obj.TryGetComponent(out Projectile proj))
         {
@@ -34,7 +60,7 @@ public class SpiderAI : EnemyAIBase
 
         if (obj.TryGetComponent(out Rigidbody rb))
         {
-            rb.linearVelocity = shootPoint.forward * projectileSpeed;
+            rb.linearVelocity = dir * projectileSpeed;
         }
     }
 }
