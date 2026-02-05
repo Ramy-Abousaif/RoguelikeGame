@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1922351405280922374}
   - component: {fileID: 3878146588547235472}
   - component: {fileID: 1412112247077706709}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 2208691312383786633}
   - component: {fileID: 4631141294689927714}
   - component: {fileID: 6261167300889987615}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Cube (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8833247794352046060}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Renderers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -228,7 +228,7 @@ GameObject:
   - component: {fileID: 5516002293756224779}
   - component: {fileID: 2319128750139590963}
   - component: {fileID: 3956348807633654189}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -317,7 +317,7 @@ GameObject:
   - component: {fileID: 2789255595228855541}
   - component: {fileID: 5728669030981004685}
   - component: {fileID: 5635899636044096700}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -406,7 +406,7 @@ GameObject:
   - component: {fileID: 1234659064480812624}
   - component: {fileID: 3415493131915857545}
   - component: {fileID: 5629175859590685891}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Cube (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -498,7 +498,8 @@ GameObject:
   - component: {fileID: 2958455421973525170}
   - component: {fileID: -4940182986056479926}
   - component: {fileID: 1150160964175737373}
-  m_Layer: 8
+  - component: {fileID: 2809380688708806804}
+  m_Layer: 15
   m_Name: Cool Epic Summon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -559,6 +560,7 @@ MonoBehaviour:
   armor: 0
   flashDuration: 0.1
   numberEffect: {fileID: 7261022963547120728, guid: fbc70f98fa1af54458ba354c76d5815b, type: 3}
+  stunEffect: {fileID: 0}
   deathEffect: {fileID: 1210030292047349381, guid: 43a29de6fa71e204cbfa68082d92a2d1, type: 3}
   _renderers:
   - {fileID: 82819726416527845}
@@ -617,9 +619,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8193
   losMaxDistance: 50
-  faction: 1
+  faction: 2
   windupTime: 0.3
   faceTargetSpeed: 12
+  autoAcquireTarget: 1
+  targetRefreshInterval: 0.25
+  targetSearchRange: 50
 --- !u!114 &1150160964175737373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -642,6 +647,22 @@ MonoBehaviour:
     m_Bits: 8321
   aimHeightOffset: 1
   useLeading: 1
+--- !u!114 &2809380688708806804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5720607538058651576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39bb0cbae3508024385527ecfec7526b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AITargetable
+  faction: 2
+  priority: 50
+  maxAttractRange: 0
+  isLure: 0
 --- !u!1 &6343518690290683474
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,7 +674,7 @@ GameObject:
   - component: {fileID: 5139713243829453105}
   - component: {fileID: 6693290247325527188}
   - component: {fileID: 3028885645705205195}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -742,7 +763,7 @@ GameObject:
   - component: {fileID: 7878835552118162556}
   - component: {fileID: 8913442838239315399}
   - component: {fileID: 7492602370056102287}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Cube (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -831,7 +852,7 @@ GameObject:
   - component: {fileID: 4207481610507367639}
   - component: {fileID: 1212408013444458629}
   - component: {fileID: 82819726416527845}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

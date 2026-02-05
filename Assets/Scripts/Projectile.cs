@@ -20,7 +20,7 @@ public class Projectile : PooledObject
 
     private MaterialPropertyBlock _mpb;
     private Renderer[] _renderers;
-    private Rigidbody rb;
+    protected Rigidbody rb;
 
     [Header("Impact")]
     [SerializeField] private bool stickable;
@@ -38,7 +38,7 @@ public class Projectile : PooledObject
     private bool hasHit = false;
     private float rotYOffset;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         startPos = transform.position;
         rotYOffset = transform.eulerAngles.y;
@@ -95,7 +95,7 @@ public class Projectile : PooledObject
         if (c != null) c.enabled = true;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (hasHit && !dissolveable)
             return;

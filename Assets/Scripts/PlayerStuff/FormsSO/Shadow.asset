@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7da096c3f12c5845bd2bebab64a2fd2, type: 3}
   m_Name: Shadow
   m_EditorClassIdentifier: Assembly-CSharp::CharacterForm
-  moveSpeedMultiplier: 0.75
+  moveSpeedMultiplier: 2
   damageMultiplier: 2
   canFly: 1
   abilities:
@@ -31,6 +31,8 @@ MonoBehaviour:
     baseAbilityDamage: 10
     currentAbilityDamage: 10
     affectedByAttackSpeed: 1
+    stunnable: 0
+    stunDuration: 0
     cooldownTimer: 0
     clip: {fileID: 7400000, guid: 0c9c1b5af45660b4b847909d66f7abe8, type: 2}
     isPlaying: 0
@@ -50,11 +52,13 @@ MonoBehaviour:
     baseAbilityDamage: 4
     currentAbilityDamage: 4
     affectedByAttackSpeed: 0
-    cooldownTimer: 1.5405333
+    stunnable: 0
+    stunDuration: 0
+    cooldownTimer: 0
     clip: {fileID: 0}
     isPlaying: 0
     playTimer: 0
-  - stateName: 
+  - stateName: Third Attack Transformed
     icon: {fileID: 21300000, guid: 9ed3e537dfcd17145a1a8b7bfdecacad, type: 3}
     layerIndex: 1
     useAnimationEvent: 0
@@ -69,7 +73,9 @@ MonoBehaviour:
     baseAbilityDamage: 2
     currentAbilityDamage: 2
     affectedByAttackSpeed: 0
-    cooldownTimer: 0
+    stunnable: 0
+    stunDuration: 0
+    cooldownTimer: 3.9996047
     clip: {fileID: 0}
     isPlaying: 0
     playTimer: 0
@@ -88,6 +94,8 @@ MonoBehaviour:
     baseAbilityDamage: 0
     currentAbilityDamage: 0
     affectedByAttackSpeed: 0
+    stunnable: 0
+    stunDuration: 0
     cooldownTimer: 0
     clip: {fileID: 0}
     isPlaying: 0

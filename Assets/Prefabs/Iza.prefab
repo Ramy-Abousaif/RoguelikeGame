@@ -6370,6 +6370,7 @@ GameObject:
   - component: {fileID: 8082372709868606898}
   - component: {fileID: 4551761767343537999}
   - component: {fileID: 4057184020516795342}
+  - component: {fileID: 3402595189958929150}
   m_Layer: 7
   m_Name: Iza
   m_TagString: Enemy
@@ -6426,7 +6427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d91b7a99fcc914e43bdc0d6068850ce1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  maxHealth: 1000
+  maxHealth: 100
   currentHealth: 0
   armor: 0
   flashDuration: 0.1
@@ -6478,9 +6479,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8193
   losMaxDistance: 50
-  faction: 0
+  faction: 1
   windupTime: 0.3
   faceTargetSpeed: 12
+  autoAcquireTarget: 1
+  targetRefreshInterval: 0.25
+  targetSearchRange: 50
 --- !u!114 &4057184020516795342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6500,9 +6504,25 @@ MonoBehaviour:
   projectileDamage: 10
   projectileHitMask:
     serializedVersion: 2
-    m_Bits: 8257
+    m_Bits: 41025
   aimHeightOffset: 1
   useLeading: 1
+--- !u!114 &3402595189958929150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4951942975169993934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39bb0cbae3508024385527ecfec7526b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AITargetable
+  faction: 1
+  priority: 0
+  maxAttractRange: 0
+  isLure: 0
 --- !u!1 &5038593895944776016
 GameObject:
   m_ObjectHideFlags: 0

@@ -475,10 +475,7 @@ MonoBehaviour:
   optionalHeldItem: {fileID: 5620409682565797364}
   abilityIndex: 0
   projectilePrefab: {fileID: 5685342519408403706, guid: 09cf21b0e3742d148ab245dd9deb59c0, type: 3}
-  enemyMask:
-    serializedVersion: 2
-    m_Bits: 128
-  baseLaunchForce: 10000
+  baseLaunchForce: 100
   baseRange: 10
   spin: 25
 --- !u!1 &74523266
@@ -8956,10 +8953,7 @@ MonoBehaviour:
   optionalHeldItem: {fileID: 0}
   abilityIndex: 2
   projectilePrefab: {fileID: 4262637840000889668, guid: 06ae2794680224f4ea0c5eb479fc4c13, type: 3}
-  enemyMask:
-    serializedVersion: 2
-    m_Bits: 0
-  baseLaunchForce: 20000
+  baseLaunchForce: 20
   baseRange: 10
   spin: 0
 --- !u!1 &1562326063
@@ -9599,6 +9593,7 @@ GameObject:
   - component: {fileID: 1830749961}
   - component: {fileID: 1830749960}
   - component: {fileID: 1830749959}
+  - component: {fileID: 1830749966}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -9935,6 +9930,7 @@ MonoBehaviour:
   armor: 0
   flashDuration: 0.1
   numberEffect: {fileID: 7261022963547120728, guid: fbc70f98fa1af54458ba354c76d5815b, type: 3}
+  stunEffect: {fileID: 0}
   items: []
   attackSpeed: 2
   abilities: {fileID: 0}
@@ -10111,6 +10107,22 @@ Transform:
   - {fileID: 1821656738}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1830749966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1830749958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39bb0cbae3508024385527ecfec7526b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AITargetable
+  faction: 0
+  priority: 0
+  maxAttractRange: 0
+  isLure: 0
 --- !u!1 &1908507639
 GameObject:
   m_ObjectHideFlags: 0

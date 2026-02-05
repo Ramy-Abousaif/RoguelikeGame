@@ -55,7 +55,7 @@ MonoBehaviour:
   damage: 10
   hitMask:
     serializedVersion: 2
-    m_Bits: 8257
+    m_Bits: 41025
   directDamage: 1
   stickable: 0
   rotXOffset: 0

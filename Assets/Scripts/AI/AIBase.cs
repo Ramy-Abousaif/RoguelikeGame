@@ -2,13 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum Faction
-{
-    Player,
-    Enemy,
-    Ally
-}
-
 public class AIBase : MonoBehaviour
 {
     public enum State { Chase, Windup, Attack, Stunned }
@@ -38,6 +31,14 @@ public class AIBase : MonoBehaviour
 
     [Header("Rotation")]
     [SerializeField] protected float faceTargetSpeed = 12f;
+
+    [Header("Targeting")]
+    [SerializeField] private bool autoAcquireTarget = true;
+    [SerializeField] private float targetRefreshInterval = 0.25f;
+    [SerializeField] private float targetSearchRange = 50f;
+
+    private float targetRefreshTimer;
+    private Transform defaultTarget;
 
     protected State state;
     public Transform Target => target;
@@ -74,6 +75,8 @@ public class AIBase : MonoBehaviour
                 targetCharacter = p.GetComponent<Character>();
             }
         }
+
+        defaultTarget = target;
         attacks = GetComponents<AIAttack>();
     }
 
@@ -134,6 +137,16 @@ public class AIBase : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (autoAcquireTarget)
+        {
+            targetRefreshTimer -= Time.deltaTime;
+            if (targetRefreshTimer <= 0f || target == null)
+            {
+                targetRefreshTimer = targetRefreshInterval;
+                RefreshTarget();
+            }
+        }
+
         if (target == null) return;
 
         if (attacks != null)
@@ -168,6 +181,17 @@ public class AIBase : MonoBehaviour
 
         if (state != State.Windup)
             UpdateChase();
+    }
+
+    protected virtual void RefreshTarget()
+    {
+        var best = AITargetManager.GetBestTarget(transform.position, faction, targetSearchRange);
+
+        if (best != null)
+        {
+            target = best.transform;
+            targetCharacter = target.GetComponent<Character>();
+        }
     }
 
     protected virtual void StartWindup()

@@ -4,7 +4,6 @@ using UnityEngine;
 public class ProjectileEmitter : AbilityEmitter
 {
     [SerializeField] private GameObject projectilePrefab;
-    [SerializeField] private LayerMask enemyMask;
     [SerializeField] private float baseLaunchForce = 25f;
     [SerializeField] private float baseRange = 10f;
     [SerializeField] private float spin = 20f;
@@ -20,13 +19,12 @@ public class ProjectileEmitter : AbilityEmitter
         float force = baseLaunchForce;
         Vector3 dir = Camera.main.transform.forward;
 
-        rb.AddForce(dir * force);
+        rb.AddForce(dir * force, ForceMode.VelocityChange);
         rb.AddTorque(firePoint.up * spin, ForceMode.VelocityChange);
 
         if (proj.TryGetComponent(out Projectile projectile))
         {
             projectile.SetOwner(player);
-            //projectile.SetHitMask(enemyMask);
             projectile.SetDamage(ability.currentAbilityDamage);
             projectile.SetAbilityIndex(abilityIndex);
             projectile.SetRange(ability.currentAbilityRange * baseRange);
