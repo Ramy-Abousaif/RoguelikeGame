@@ -38,7 +38,6 @@ public class AIBase : MonoBehaviour
     [SerializeField] private float targetSearchRange = 50f;
 
     private float targetRefreshTimer;
-    private Transform defaultTarget;
 
     protected State state;
     public Transform Target => target;
@@ -53,30 +52,9 @@ public class AIBase : MonoBehaviour
         if (anim == null) anim = GetComponentInChildren<Animator>();
 
         if (losOrigin == null) losOrigin = transform;
+        
+        RefreshTarget(Mathf.Infinity);
 
-        if (target == null)
-        {
-            GameObject p = null;
-            switch (faction)
-            {
-                case Faction.Enemy:
-                    p = GameObject.FindWithTag("Enemy");
-                    break;
-                case Faction.Player:
-                    p = GameObject.FindWithTag("Player");
-                    break;
-                default:
-                    p = null;
-                    break;
-            }
-            if (p != null)
-            {
-                target = p.transform;
-                targetCharacter = p.GetComponent<Character>();
-            }
-        }
-
-        defaultTarget = target;
         attacks = GetComponents<AIAttack>();
     }
 
@@ -183,9 +161,10 @@ public class AIBase : MonoBehaviour
             UpdateChase();
     }
 
-    protected virtual void RefreshTarget()
+    protected virtual void RefreshTarget(float overrideRange = -1f)
     {
-        var best = AITargetManager.GetBestTarget(transform.position, faction, targetSearchRange);
+        float range = overrideRange > 0f ? overrideRange : targetSearchRange;
+        var best = AITargetManager.GetBestTarget(transform.position, faction, range);
 
         if (best != null)
         {

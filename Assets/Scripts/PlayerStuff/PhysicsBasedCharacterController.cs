@@ -157,6 +157,10 @@ public class PhysicsBasedCharacterController : Character
     public void EnableFlight(bool value)
     {
         IsFlying = value;
+        _isJumping = false;
+        _isGrounded = false;
+        _timeSinceUngrounded = Mathf.Infinity;
+        _timeSinceJump = Mathf.Infinity;
         _rb.useGravity = !value;
         _rb.freezeRotation = value;
         
@@ -462,8 +466,7 @@ public class PhysicsBasedCharacterController : Character
             return;
         }
 
-        Vector3 origin = transform.position + Vector3.up * 0.9f; // same as PerformInteract
-        Vector3 point = origin + cam.transform.forward * interactRange;
+        Vector3 point = cam.transform.position + cam.transform.forward * interactRange;
 
         Collider[] hits = Physics.OverlapSphere(point, interactRadius, interactLayerMask);
         HashSet<GameObject> hitObjects = new HashSet<GameObject>();
@@ -687,8 +690,7 @@ public class PhysicsBasedCharacterController : Character
 
     private void PerformInteract()
     {
-        Vector3 origin = transform.position + Vector3.up * 0.9f; // approximate chest height
-        Vector3 point = origin + cam.transform.forward * interactRange;
+        Vector3 point = cam.transform.position + cam.transform.forward * interactRange;
 
         Collider[] hits = Physics.OverlapSphere(point, interactRadius, interactLayerMask);
         foreach (var hit in hits)
