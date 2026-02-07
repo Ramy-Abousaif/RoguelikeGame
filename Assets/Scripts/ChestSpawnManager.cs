@@ -43,7 +43,7 @@ public class ChestSpawnManager : MonoBehaviour
             {
                 if (TryFindChestPosition(out Vector3 pos, out Quaternion rot))
                 {
-                    Instantiate(chestPrefab, pos, rot);
+                    Instantiate(chestPrefab, pos, rot, transform);
                     break;
                 }
             }
