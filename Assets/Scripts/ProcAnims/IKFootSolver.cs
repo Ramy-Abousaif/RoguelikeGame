@@ -35,7 +35,12 @@ public class IKFootSolver : MonoBehaviour
         transform.position = currentPosition;
         transform.forward = -currentNormal;
 
-        Ray ray = new Ray(body.position + (body.right * xSpacing) + (body.forward * zSpacing), Vector3.down);
+        Vector3 rayOrigin =
+            body.position + Vector3.up * 0.5f +
+            (body.right * xSpacing) +
+            (body.forward * zSpacing);
+
+        Ray ray = new Ray(rayOrigin, Vector3.down);
 
         if (Physics.Raycast(ray, out RaycastHit info, 10, lm.value))
         {

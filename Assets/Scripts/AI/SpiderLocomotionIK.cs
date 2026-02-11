@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SpiderLocomotionIK : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class SpiderLocomotionIK : MonoBehaviour
     [SerializeField] private float bodyHeightOffset = 1.4f;
     [SerializeField] private float bodyPositionSpring = 25f;
     [SerializeField] private float bodyRotationSpring = 20f;
+
+    private float maxSink = 0.3f; // how far below navmesh visuals can go
+    private float maxLift = 0.5f; // how far above navmesh visuals can go
 
 
     // Second-order dynamics state
@@ -33,16 +37,30 @@ public class SpiderLocomotionIK : MonoBehaviour
     {
         float avgFootHeight =
             (BRFoot.position.y +
-             BLFoot.position.y +
-             FRFoot.position.y +
-             FLFoot.position.y) * 0.25f;
+            BLFoot.position.y +
+            FRFoot.position.y +
+            FLFoot.position.y) * 0.25f;
 
-        Vector3 targetLocalPos = bodyPivot.localPosition;
-        targetLocalPos.y = avgFootHeight + bodyHeightOffset;
+        if (!TryGetNavmeshHeight(out float navY))
+            navY = transform.position.y;
+
+        float targetWorldY = Mathf.Clamp(
+            avgFootHeight,
+            navY - maxSink,
+            navY + maxLift
+        );
+
+        Vector3 worldTarget = new Vector3(
+            bodyPivot.position.x,
+            targetWorldY,
+            bodyPivot.position.z
+        );
+
+        Vector3 localTarget = bodyPivot.parent.InverseTransformPoint(worldTarget) + bodyHeightOffset * Vector3.up;
 
         bodyPivot.localPosition = Vector3.SmoothDamp(
             bodyPivot.localPosition,
-            targetLocalPos,
+            localTarget,
             ref bodyPosVelocity,
             1f / bodyPositionSpring,
             Mathf.Infinity,
@@ -80,5 +98,17 @@ public class SpiderLocomotionIK : MonoBehaviour
         );
 
         Debug.DrawRay(bodyPivot.position, smoothedUp, Color.red);
+    }
+
+    bool TryGetNavmeshHeight(out float height)
+    {
+        if (NavMesh.SamplePosition(transform.position, out var hit, 1.0f, NavMesh.AllAreas))
+        {
+            height = hit.position.y;
+            return true;
+        }
+
+        height = transform.position.y;
+        return false;
     }
 }
